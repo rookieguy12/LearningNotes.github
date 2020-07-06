@@ -1,0 +1,69 @@
+pwd		显示当前目录	
+cd /d/gitdatabase		切换路径
+mkdir database1		创建文件夹
+git init	将当前目录变为git可管理仓库，即工作区
+
+//提交文件步骤(存档)
+git add 1.txt 2.txt	将文件添加到暂存区仓库(文件要放在git可管理仓库内)
+git add --all
+git commit -m "提交说明"	将暂存区的文件提交到版本库
+
+//文件修改->转文件提交
+git status		显示当前仓库状态
+git diff	显示对仓库内文件所作的修改
+
+//版本回退(读档)
+git log		查看提交历史(HEAD表示最新版本)
+git log --pretty=oneline	查看历史存档记录(简化版)
+git reset --hard HEAD^		版本回退到上一个，HEAD^^表示上上个，HEAD~3表示上上一个
+cat 1.txt	显示当前工作区的1.txt的内容
+git reset --hard commit_id		通过id回到某个版本
+git reflog		查看记录的每一次命令，可以看到commit_id，id也可从log中得到
+git diff HEAD -- 1.txt	查看工作区和版本库内的最新版本的区别
+
+//撤销修改
+git restore 1.txt	撤销对工作区的修改
+git restore --staged 1.txt		将文件1.txt从暂存区撤下来
+
+//删除文件
+rm 2.txt	把工作区文件2.txt删了
+git rm 2.txt	
+git commit -m "提交说明"	从版本库中删2.txt并提交删改版本
+
+//关联github
+git remote add origin git@github.com:rookieguy12/experiment.git		将本地仓库与origin关联
+
+//将本地库master分支push到github
+git push -u origin master	将本地库的matser分支推送到远程对应分支上，初次要加-u，之后不必加了
+
+//将github远程库clone到本地
+git clone git@github.com:rookieguy12/experiment.git		//将github远程库experimentclone到本地工作区
+
+//分支创建与切换
+git branch dev	创建分支dev
+git switch dev 	切换到分支dev
+git switch -c dev		创建并切换到分支dev
+git branch		显示所有分支
+git merge dev	将dev分支的内容合并到当前分支
+git merge --no-ff -m "merge without using fast forward" dev		禁用fastforward将创建commit,故将描述写入
+git branch -d dev	删除分支dev
+git branch -D dev	强制删除分支dev，一般没合并
+
+//BUG分支
+git stash	暂时储存工作现场，期间可以进行其它分支操作
+git stash list		列出储存的工作现场
+git stash pop	弹出一个工作现场
+git stash apply stash@{0}	使用但不删除工作现场0
+git stash drop stash@{0}	删除工作现场0
+git cherry-pick	commit_id	将commit_id的提交复制到当前分支的新建提交
+
+//多人协作
+git remote		查看远程库名称
+git remote -v	查看远程库详细信息
+git switch -c dev	创建远程库dev分支
+git pull	抓取最新的提交并与当前的进行merge
+
+//rebase
+git log --graph --pretty=oneline --abbrev-commit	显示可视化分支状态
+git rebase		整合分支
+
