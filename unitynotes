@@ -1,0 +1,96 @@
+/*场景加载*/
+SceneManager.LoadScene("Scene/sample1", LoadSceneMode.Addictive);//同步加载场景(附加)
+SceneManager.LoadSceneAsync("scenepath", LoadSceneMode.Addictive);//异步加载场景, 返回一个类AsyncOperation
+AsyncOperation.isDone;//判断场景加载跳转是否完成，所以当前允许跳转还无法为true，而是跳转场景允许的后一帧才会显示true
+AsyncOperation.allowSceneActivation;//加载完成时是否允许跳转
+AsyncOperation.progress;//加载进度(0到0.9)
+
+
+//切换场景时的物体保留
+GameObject Cube = GameObject.Find("Cube");
+DontDestroyOnLoad(Cube);//加载新场景时保留Cube物体
+SceneManager.LoadScene("Scene/sample1");	
+
+
+/*预制件的保存，读取，更新，删除*/
+//加载一个Resources内的预制件
+GameObject hero = Resources.Load<GameObject>("Sphere");
+GameObject.Instantiate(hero);
+
+//加载Resources预制件,也可先创建空白public GameObject,做相同引入操作,再到unity里头指定该GameObject对象
+public GameObject hero;
+GameObject.Instantiate(hero);
+
+/*脚本中对物体的交互*/
+//查找预制件
+//通过路径查找
+GameObject Cubetemp = GameObject.Find("Cube1");
+//通过标签查找
+GameObject Cube2 = GameObject.FindGameObjectWithTag("Cube");
+
+//修改物体
+Cubetemp.name = "Cube2";	//修改物体名字
+Cubetemp.transform.Position = new Vector3(x, y, z);//修改物体在全域的位置
+Cubetemp.transform.localPosition = new Vector3.zero;//修改物体到相较于所属物体组件原点的位置
+sphere.transform.position = new Vector3(23, 51, 34);//改位置
+sphere.transform.localScale = new Vector3(5, 5, 5);	//缩放
+sphere.transform.rotation = Quaternion.Euler(0,0,90);//旋转
+sphere.transform.eulerAngles = new Vector3(100, 40.5f, 120);//旋转
+
+//删除物体
+Destroy(sphere);//删的物体不能是assert内的资源，注意名称问题
+
+//组件管理  通过代码添加和查找组件
+//添加组件
+GameObject textcolomn = GameObject.FInd("Text");
+textcolomn.AddComponent<AudioSource>();	//给Text物体对象添加一个音频组件
+
+//查找自身组件并修改组件内容
+//单个组件查找，直接返回该组件
+textcolomn.GetComponent<Text>().text = "查找到该组件";
+//查找自身及子物体的组件并修改组件内容，优先查自己的，查到就就用这个了
+textcolomn.GetComponentInChildren<Text>().text = "查到该组件了";
+//查找自身及父物体的组件并修改组件内容，优先查自己的，查到就就用这个了
+textcolomn.GetComponentInParent<Text>().text = "查到该组件了";
+
+//多个相同组件的查找，返回该组件的数组
+Text [] textcolomns = textcolomn.GetComponents<Text>();
+//查找自身及子物体的组件内容
+Text [] textcolomns = textcolomn.GetComponentsInChildren<Text>();
+//查找自身及父物体的组件内容
+Text [] textcolomns = textcolomn.GetComponentsInParent<Text>();
+
+
+
+//通过代码激活，删除，关闭组件
+textcolomn.GetComponent<Text>().enabled = false;	
+textcolomn.GetComponent<Text>().enabled = true;//组件都有一个bool成员enabld，false为关闭状态，true为打开状态
+this.enabled = false;	//关闭脚本自身
+//删除组件
+AudioSource audio = textcolomn.GetComponent<AudioSource>();
+Destroy(audio,5);//用Destroy删除组件
+
+
+//UGUI图形系统
+
+//1.画布与事件系统
+
+
+
+
+
+
+//yield return的常见用法
+yield return null; // 下一帧再执行后续代码
+yield return 0; //下一帧再执行后续代码
+yield return 6;//(任意数字) 下一帧再执行后续代码
+yield break; //直接结束该协程的后续操作
+yield return asyncOperation;//等异步操作结束后再执行后续代码
+yield return StartCoroution(/*某个协程*/);//等待某个协程执行完毕后再执行后续代码
+yield return WWW();//等待WWW操作完成后再执行后续代码
+yield return new WaitForEndOfFrame();//等待帧结束,等待直到所有的摄像机和GUI被渲染完成后，在该帧显示在屏幕之前执行
+yield return new WaitForSeconds(0.3f);//等待0.3秒，一段指定的时间延迟之后继续执行，在所有的Update函数完成调用的那一帧之后（这里的时间会受到Time.timeScale的影响）;
+yield return new WaitForSecondsRealtime(0.3f);//等待0.3秒，一段指定的时间延迟之后继续执行，在所有的Update函数完成调用的那一帧之后（这里的时间不受到Time.timeScale的影响）;
+yield return WaitForFixedUpdate();//等待下一次FixedUpdate开始时再执行后续代码
+yield return new WaitUntil()//将协同执行直到 当输入的参数（或者委托）为true的时候....如:yield return new WaitUntil(() => frame >= 10);
+yield return new WaitWhile()//将协同执行直到 当输入的参数（或者委托）为false的时候.... 如:yield return new WaitWhile(() => frame < 10);

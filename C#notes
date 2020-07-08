@@ -1,0 +1,42 @@
+// C# notes
+dynamic d = 20;	//动态类型，可储存任何类型的值
+
+Console.ReadLine();
+Console.WriteLine();
+Convert.ToInt32(Console.ReadLine());
+
+class ForEachTest
+{
+	public void swap(ref int x, ref int y)
+	{
+		int temp;
+		temp = x;
+		x = y;
+		y = x;
+	}	//按引用传递参数,用ref关键字
+	public void getvalues(out int x, out int y)
+	{
+		Console.WriteLine("请输入第一个值： ");
+        x = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("请输入第二个值： ");
+        y = Convert.ToInt32(Console.ReadLine());
+    }	//输出参数，传入的参数可不初始化
+    static void Main(string[] args)
+    {
+        int[] fibarray = new int[] { 0, 1, 1, 2, 3, 5, 8, 13 };	//C#的array定义方法
+        double[] balance = new double[10];
+		double[] balance = new double[] {4,2,4,5};
+		int [,] a = new int [3,4]	//二维数组
+		a[2,3] = 5; //访问元素的办法
+		int[][] scores = new int[2][] {new int[] {92,93,94}, new int[] {1,2,3,4,5}};	//交错数组
+		
+		ForEachTest class1 = new ForEachTest();		//new的用法
+		foreach (int element in fibarray)
+        {
+            System.Console.WriteLine(element);
+        }
+		int? num1 = null;	//可空类型
+		int? num2 = 3;	
+		int num3 = num1 ?? num2;//Null合并运算符,第一个为null，就返回第二个，否则返回第一个
+	}
+}	//foreach 循环
