@@ -40,6 +40,48 @@ sphere.transform.eulerAngles = new Vector3(100, 40.5f, 120);//旋转
 //删除物体
 Destroy(sphere);//删的物体不能是assert内的资源，注意名称问题
 
+/*物体移动*/
+float xmove = Input.GetAxis("Horizontal");//AD控制
+float zmove = Input.GetAxis("Vertical");//WS控制,此处设置为前后，也可设置为上下，看后面的那条语句
+sphere.transform.Translate(new Vector3(xmove, 0, zmove) * step * Time.deltaTime);
+/*视角变化*/
+public class shoot : MonoBehaviour
+{
+    //设置鼠标灵敏度
+    public float sensitivity = 3f;
+    public float rotver;
+    public float rothor;
+    public float upver = -60;
+    public float downver = 45;
+    void Start()
+    {
+        rotver = transform.eulerAngles.x;
+		rothor = transform.eulerAngles.y;
+    }
+    void Update()
+    {
+        float mouseVer = Input.GetAxis("Mouse Y");
+        float mouseHor = Input.GetAxis("Mouse X");
+        //上下视角变换,注意,鼠标向下划为负，但是视角向下转值变大，故用减法
+        rotver -= mouseVer * sensitivity;
+        rotver = Mathf.Clamp(rotver, upver, downver);//竖直方向的视角需要有控制范围的函数
+        //水平视角变换
+        rothor += mouseHor * sensitivity;
+        transform.localEulerAngles = new Vector3(rotver, rothor, 0);
+	}
+/*transform.forward与Vector3.forward*/
+forward==>(0,0,1);//蓝轴z
+up==>(0,1,0);//绿轴y
+right==>(0,1,0);//红轴x
+Vector3.forward;//表示世界坐标系下(0,0,1)
+Vector3 dir = transform.TransformDirection(Vector3.forward);//将相对于本地坐标系的(0,0,1)转换成为世界坐标系dir,dir也等于transform.forward
+/*Translate方法*/
+public void Translate (Vector3 translation);
+public void Translate (Vector3 translation, Space relativeTo= Space.Self);
+public void Translate (float x, float y, float z);
+public void Translate (float x, float y, float z, Space relativeTo= Space.Self);
+
+
 //组件管理  通过代码添加和查找组件
 //添加组件
 GameObject textcolomn = GameObject.FInd("Text");
