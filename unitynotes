@@ -81,6 +81,21 @@ public void Translate (Vector3 translation, Space relativeTo= Space.Self);
 public void Translate (float x, float y, float z);
 public void Translate (float x, float y, float z, Space relativeTo= Space.Self);
 
+/*鼠标的隐藏与显示*/
+public enum CursorLockMode
+    {
+        None = 0,
+                //游标行为不作修改
+        Locked = 1,
+                //锁定游标到游戏窗口的中心
+        Confined = 2
+                //将游标限制在游戏窗口中
+    }
+public static CursorLockMode lockState { get; set;}//确定硬件指针是锁定到视图的中心，是否受窗口限制，或者根本不受约束。
+public static bool visible { get; set; }//确定硬件指针是否可见
+Cursor.lockState = CursorLockMode.Locked;//锁定指针到视图中心
+Cursor.visible = false;//隐藏指针
+
 
 //组件管理  通过代码添加和查找组件
 //添加组件
@@ -111,6 +126,9 @@ this.enabled = false;	//关闭脚本自身
 //删除组件
 AudioSource audio = textcolomn.GetComponent<AudioSource>();
 Destroy(audio,5);//用Destroy删除组件
+
+
+/*图片透明度变化*/
 
 
 //UGUI图形系统
