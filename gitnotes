@@ -34,7 +34,7 @@ git commit -m "提交说明"	从版本库中删2.txt并提交删改版本
 git remote add origin git@github.com:rookieguy12/experiment.git		将本地仓库与origin关联
 
 //将本地库master分支push到github
-git push -u origin master	将本地库的matser分支推送到远程对应分支上，初次要加-u，之后不必加了
+git push -u origin master	将本地库的分支推送到远程对应master分支上，初次要加-u，之后不必加了
 
 //将github远程库clone到本地
 git clone git@github.com:rookieguy12/experiment.git		//将github远程库experimentclone到本地工作区
