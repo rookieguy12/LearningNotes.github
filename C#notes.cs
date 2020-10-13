@@ -27,7 +27,7 @@ class ForEachTest
         int[] fibarray = new int[] { 0, 1, 1, 2, 3, 5, 8, 13 };	//C#的array定义方法
         double[] balance = new double[10];
 		double[] balance = new double[] {4,2,4,5};
-		int [,] a = new int [3,4]	//二维数组
+		int [,] a = new int [3,4];	//二维数组
 		a[2,3] = 5; //访问元素的办法
 		int[][] scores = new int[2][] {new int[] {92,93,94}, new int[] {1,2,3,4,5}};	//交错数组
 		
@@ -44,14 +44,14 @@ class ForEachTest
 
 //C#类与接口
 //1.类继承类和接口
-public Tabletop(double l, double w) : base(l, w){ };//Tabletop是一个派生的类，C#用base表示基类，C#不支持多重继承
+public Tabletop(double l, double w) : base(l, w){ };//Tabletop是一个派生的类，C#用base表示基类，C#不支持多重继承,但允许继承多个接口
 
 //2.密封类sealed
 sealed class classname{
 }//sealed关键字声明一个密封类，表示无法继承
 
 //3.接口interface
-//一个类只能bai继承一个类但是可以继承多个接口
+//一个类只能继承一个类但是可以继承多个接口
 //接口interface
 public interface PaintCost
    {
@@ -175,7 +175,7 @@ class DelegateExample
         double[] squares = Apply(a, Square);
         double[] sines = Apply(a, Math.Sin);
         Multiplier m = new Multiplier(2.0);
-        double[] doubles =  Apply(a, m.Multiply);
+        double[] doubles =  Apply(a, m.Multiply);//使用
     }
 }
 //2.多播
@@ -313,6 +313,54 @@ namespace IndexerApplication
          Console.ReadKey();
       }
    }
+}
+
+//C#匿名方法:用委托创建匿名方法，既可以直接创建一个实例，也可以用已有的方法实例化该委托。
+using System;
+
+delegate void NumberChanger(int n);
+namespace DelegateAppl
+{
+    class TestDelegate
+    {
+        static int num = 10;
+        public static void AddNum(int p)
+        {
+            num += p;
+            Console.WriteLine("Named Method: {0}", num);
+        }
+
+        public static void MultNum(int q)
+        {
+            num *= q;
+            Console.WriteLine("Named Method: {0}", num);
+        }
+
+        static void Main(string[] args)
+        {
+            // 使用匿名方法创建委托实例
+            NumberChanger nc = delegate(int x)
+            {
+               Console.WriteLine("Anonymous Method: {0}", x);
+            };
+           
+            // 使用匿名方法调用委托
+            nc(10);
+
+            // 使用命名方法实例化委托
+            nc =  new NumberChanger(AddNum);
+           
+            // 使用命名方法调用委托
+            nc(5);
+
+            // 使用另一个命名方法实例化委托
+            nc =  new NumberChanger(MultNum);
+           
+            // 使用命名方法调用委托
+            nc(2);
+            Console.ReadKey();
+        }
+    }
 }
 
 
