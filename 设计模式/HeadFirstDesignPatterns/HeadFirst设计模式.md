@@ -517,3 +517,28 @@ public class DecorationExample : MonoBehaviour
 
 #### 4.2.5 <u>工厂方法模式</u>
 
++ 与简单工厂将生产集中到一个工厂中不同，工厂方法模式将产品的生产方法定义为一个由子类实现的抽象方法/接口，让子类封装实现它，去实现不同的实例化过程，而让基类作为一个抽象类接口去完成生产的多态。
++ 抽象工厂具体包含两个类，一个是创建者类，Creator类，一个是产品类Product类，比如这里的Pizza抽象类。
+
+![](HeadFirst_Pictures\23.png)
+![](HeadFirst_Pictures\24.png)
+
+```c#
+public abstract class PizzaStore
+{
+    public Pizza orderPizza(string type)
+    {
+        Pizza pizza;
+        pizza = createPizza(type);
+        pizza.prepare();
+        pizza.bake();
+        pizza.cut();
+        pizza.box();
+        return pizza;
+	}
+    
+    // 生产实例的抽象方法
+    protected abstract Pizza createPizza(string type);
+}
+```
+
