@@ -477,7 +477,7 @@ public class DecorationExample : MonoBehaviour
 
 ![](HeadFirst_Pictures\17.png)
 
-## *4. 工厂模式：实例化的低耦合*
+## *<u>4. 工厂模式：实例化的低耦合</u>*
 
 ### 4.1 引入——传统new实例化的不合理性
 
@@ -493,4 +493,27 @@ public class DecorationExample : MonoBehaviour
 #### 4.2.2 封装创建对象的代码
 
 + 抽离if-else实例化语块，迁移到一个新对象factory中
+
+#### 4.2.3 <u>简单工厂</u>
+
+![](HeadFirst_Pictures\19.png)
+
+![](HeadFirst_Pictures\20.png)
+
++ 简单地把if-else的实例化过程搬出到Factory中，然后依赖这些产品的tag/枚举生产出对应的产品
+
+#### 4.2.4 进一步抽象
+
++ 问题：
+  + 如果要加入更多的加盟店，有着不同的工厂。
+  + 工厂的createPizza不同。但orderPizza是一样的。
+
++ 解决办法：
+  + 有加盟店，这意味着应该把PizzaStore作为抽象类。那么工厂实现的createPizza就可以作为抽象方法放到PizzaStore里，去掉多余的SimplerPizzaFactory，把PizzaStore作为抽象类，让加盟店继承它，并定义自己的createPizza方法
+  + 这些加盟店就相当于一个个工厂，而PizzaStore就是一个抽象的工厂，它定义了产品的生产接口，而实现由它的子类去做。
+    ![](HeadFirst_Pictures\21.png)
+    ![](HeadFirst_Pictures\22.png)
+  + 这样就利用PizzaStore实现了多个工厂的抽象。这样就实现了orderPizza函数和具体的Factory的解耦，因为它定义在基类中，调用了工厂抽象方法createPizza，这个方法的实现在子类中，我不知道它调用了哪个子类工厂的createPizza。
+
+#### 4.2.5 <u>工厂方法模式</u>
 
