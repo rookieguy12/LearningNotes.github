@@ -295,3 +295,95 @@
 			* 用于判断变换后顶点是否位于视椎体内的不等式和透视投影一样。都是要三个分量全部在[-w,w]之间。
 * 4.6.8 屏幕空间
 	* 经过透视投影变换到裁剪空间后，还需要将视椎体投影到屏幕空间 	
+
+## 第五章 unity shader入门
+
+### 5.2  简单的顶点/片元着色器
+
+![](D:\gitwork\LearningNotes.github\图形学\Pictures\1.png)
+
++ 例子1：
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\2.png)
+
+  要点：
+
+  + 语句块基本是固定的
+  + pragma声明了函数的作用，传入参数的语义限定说明了传入参数的性质。
++ 例子2:
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\3.png)
+  要点:
+  + 传入多个参数时用结构体，语义限定就在结构体各个参数后面写。一般结构体的名称也是有含义的：
+    + a2v（application To vertex应用到顶点）
+    + v2f（vertex To fragment顶点到片元着色器）
+  + 这些语义一般有：POSITION（顶点坐标），TANGENT，NORMAL（法线），TEXCOORD0~3，COLOR等。
+  + 这些参数是从Mesh Render组件来的，每帧调用Draw Call时就把三角面的信息发送过来。
+
+#### 5.2.3 顶点着色器与片元着色器的通信
+
++ 例子1：
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\4.png)
+
++ 要点：
+
+  + SV_POSITION是一定要赋值得到的，所以这里声明了返回必须有表示SV_POSITION的
+  + COLOR0一般存放颜色，还有COLOR1等。如逐顶点的高光反射颜色，逐顶点的漫反射颜色等。
+
+#### 5.2.4 属性的使用
+
++ 材质提供了在Shader中调节参数的方式，这些参数就写在Properties中。
+
++ 例子1：颜色拾取器
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\5.png)
+
+  要点：
+
+  + ShaderLab的属性相当于变量声明，传入一些参数，如贴图，颜色之类。后面pass要用的时候就得用CG语言再定义变量，且类型和名称得与Properties中的相匹配。
+  + uniform fixed4 _Color。uniform可省略。
+
+![](D:\gitwork\LearningNotes.github\图形学\Pictures\6.png)
+
+### 5.3 Unity的内置文件与变量
+
+#### 5.3.1 内置的包含文件
+
++ 类似头文件，也是#include "name"。但后缀为cginc
+
+![](D:\gitwork\LearningNotes.github\图形学\Pictures\7.png)
+
++ UnityCG.cginc
+
+  + 常用结构体
+
+    ![](D:\gitwork\LearningNotes.github\图形学\Pictures\8.png)
+
+  + 常用帮助函数
+
+    ![](D:\gitwork\LearningNotes.github\图形学\Pictures\9.png)
+
+    联系记忆：模型空间是物体自身的空间，比如子物体的transform就显示的是在父物体模型空间下的坐标旋转数据。而没有父物体的就是世界坐标。
+
+### 5.4 Unity提供的CG/HLSL语义
+
+#### 5.4.1 什么是语义
+
++ 如SV_POSITION,TANGENT,NORMAL等，都是语义。它们就是用来修饰参数的含义，让unity知道要从这里读取或者输出数据。
++ 有的语义有特别规定。如TEXCOORD0，在顶点着色器的输入结构体中，unity将模型的第一组纹理的坐标存入其中。而在其输出中，就能由自己决定了。
++ 带SV的表示system-value，这些叫系统数值语义。SV_POSITION表示其次裁剪空间的坐标。
+
+#### 5.2.4 Unity支持的语义
+
++ a2v的常用语义
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\10.png)
+
+  注：
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\11.png)
+
++ v2f的常用语义
+
+  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\12.png)
+
