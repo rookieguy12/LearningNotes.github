@@ -12,8 +12,9 @@
     * 光栅化阶段:决定每个渲染图元中需要绘制显示的像素，对顶点数据进行插值。
         * 主要分为三角形设定、三角形遍历、像素着色、以及合并阶段
 
-![RenderPipeline](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\RenderPipeline.png)
+![RenderPipeline](Pictures\RenderPipeline.png)
 * 其中绿色可编程，黄色可配置但不可编程，蓝色是固定的
+
 ### 2.2 CPU和GPU之间的通信
 
 + 2.2.1 把数据加载到显存中
@@ -58,7 +59,9 @@
 		+ 效率问题往往出在CPU提交命令的速度上，采用批处理的方法进行优化
 		+ 为减少Draw Call开销，一是要避免使用大量很小的网格，二是要避免使用过多的材质。
 + 2.4.4 固定管线渲染(固定函数的流水线即固定管线)
+
 ## 第三章 Unity Shader基础
+
 ### 3.1 概述(P42)
 + 3.1.1 材质与shader
 + 3.1.2 Unity中的材质
@@ -102,7 +105,7 @@
 	> }
 	> ```
 
-![Properties](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Shader Properties.png)
+![Properties](Pictures\Shader Properties.png)
 
 + 3.3.3 ***SubShader***
 1. 每个Unity Shader可以包含多个SubShader，但至少要有一个。要加载时，扫描并选择第一个能在目标平台上运行的SubShader，都不支持才使用Fallback定义的Unity Shader
@@ -124,7 +127,7 @@
 
     + 状态设置RenderSetup
 
-    + ![状态设置RenderSetup](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\ShaderLab[RenderSetup].png)
+    + ![状态设置RenderSetup](Pictures\ShaderLab[RenderSetup].png)
 
     + SubShader内定义的标签Tags设置
     	+ Tags是一个键值对，两个都是字符串类型
@@ -132,7 +135,7 @@
     	> Tags{"TagName1" = "Value1" "TagName2" = "Value2"} 
     	> ```
     	
-    + ![Tags](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\ShaderLab[Tags].png)
+    + ![Tags](Pictures\ShaderLab[Tags].png)
 
       + RenderType标签
 
@@ -179,7 +182,7 @@
       和SubShader一致
       3. Tags部分
 
-    + ![Pass_Tags](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Pass_Tags.png)
+    + ![Pass_Tags](Pictures\Pass_Tags.png)
     	4. 其它Pass定义
     		* UsePass
     		* GrabPass
@@ -193,7 +196,7 @@
 
 
 ### 3.4 Unity Shader的形式(P51)
-* ![Shader](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Shader.png)
+* ![Shader](Pictures\Shader.png)
 * 表面着色器(Surface Shader)代码写SubShader语块内，顶点/片元/固定着色器(Vetex/Fragment/Fixed Function Shader)写Pass语块内
 * 3.4.1 表面着色器
 * 3.4.2 顶点/片元着色器
@@ -226,23 +229,23 @@
 * 4.5.2 齐次坐标：将三维的转换成思维
 	* 对于一个三维的坐标，将w值设为1；而对矢量，将w值设为0，因为平移不改变矢量
 * 4.5.3 分解基础变换矩阵
-	* ![矩阵分解](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\分解基础变换矩阵.jpg)
+	* ![矩阵分解](Pictures\分解基础变换矩阵.jpg)
 	* 左上M为线性变换矩阵，右上t表示平移矩阵
 * 4.5.4 平移矩阵
-	* ![点](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\点平移矩阵.jpg)
-	* ![矢量](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\平移矩阵.jpg)
+	* ![点](Pictures\点平移矩阵.jpg)
+	* ![矢量](Pictures\平移矩阵.jpg)
 	* 上图所示为对点的平移以及对矢量的平移。
 	* 平移矩阵取逆正好就是反向平移得到的矩阵
 * 4.5.5 缩放矩阵
-	* ![缩放矩阵](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\缩放矩阵.jpg)
+	* ![缩放矩阵](Pictures\缩放矩阵.jpg)
 	* 缩放矩阵即把M设为一个对角矩阵。
 	* 参照初等矩阵的逆，缩放矩阵的逆矩阵就是把缩放系数变成倒数
 * 4.5.6 旋转矩阵
 	* 分别绕三个轴的旋转(参照数电卡诺图的相邻最小项写基本的旋转因子)
-	* ![xy](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\旋转xy矩阵.jpg)
-	* ![z](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\旋转z矩阵.jpg)
+	* ![xy](Pictures\旋转xy矩阵.jpg)
+	* ![z](Pictures\旋转z矩阵.jpg)
 	* 基本的因子
-		* ![因子](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\基本组成.jpg)
+		* ![因子](Pictures\基本组成.jpg)
 * 4.5.7 复合变换
 	* P<sub>new</sub> = M<sub>translation</sub>M<sub>rotation</sub>M<sub>scalθ</sub>P<sub>old</sub>
 
@@ -252,10 +255,10 @@
 * 例子：已知子坐标空间C的3个坐标轴矢量在父坐标空间P下的表示x<sub>c</sub>,y<sub>c</sub>,z<sub>c</sub>,以及原点位置O<sub>c</sub>，且已知一个点A<sub>c</sub>，则A<sub>p</sub> = O<sub>c</sub> + ax<sub>c</sub> + by<sub>c</sub> + cz<sub>c</sub>
 * A<sub>p</sub> = M<sub>c->p</sub>A<sub>c</sub>
 	
-	* ![M](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\M.png)
+	* ![M](Pictures\M.png)
 	* 上述矩阵相当于把C的三个基矢量放入前三列，最后一列放入原点坐标
 	* 对于矢量，由于平移不改变矢量，故M可以变成三阶，如下图所示。也是为何在shader中常常截取交换矩阵M的前三行/三列
-	* ![M](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\矢量M.jpg)
+	* ![M](Pictures\矢量M.jpg)
 
 	* 特别地，当M为正交矩阵时，由于M的转置矩阵M<sub>T</sub>等于M的逆矩阵，所以可以容易地得到父子坐标系的基在另一个坐标系里的矢量表示
 * 4.6.3 顶点的坐标空间变换过程
@@ -279,18 +282,18 @@
 	* 投影矩阵：
 		* 透视投影：
 			* 根据张开的角度FOV和远近裁剪平面的距离可以得到两裁剪平面的纵向的高度：
-			![相机](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Camera.jpg)
-			![裁剪高度](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Camera_cut_height.jpg)
+			![相机](Pictures\Camera.jpg)
+			![裁剪高度](Pictures\Camera_cut_height.jpg)
 			* 根据纵横比Aspect = Width/Height(如16:9)得到横向的宽度关于上述高度和Aspect表达式
 			* 最终的投影矩阵如下:
-			![裁剪矩阵](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\frustum.jpg)
+			![裁剪矩阵](Pictures\frustum.jpg)
 			可以发现，相当于对x，y，z做了缩放，对z再做了个平移，将其变换到了裁剪空间中，之后需要对顶点判断，必须保证x、y、z都在[-w,w]之间
-			![点透视变换](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\透视投影.jpg)
+			![点透视变换](Pictures\透视投影.jpg)
 			* 上图为对点的变换结果，实际上由于unity里面的其实都是左手系，而不是书上说的右手系。所以最后一行要写0,0,1,0而不应该是0,0,-1,0，故变换后的w是z而不是-z
 		* 正交投影：
 			* 类似的透视投影，也可以得到正交头用的裁剪矩阵和对点的裁剪结果
-			![正交投影裁剪矩阵](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\正交投影裁剪矩阵.jpg)
-			![裁剪高度](D:\学习\就业相关(游戏客户端)\图形学\书籍与笔记\Pictures\Transforms.jpg)
+			![正交投影裁剪矩阵](Pictures\正交投影裁剪矩阵.jpg)
+			![裁剪高度](Pictures\Transforms.jpg)
 			* 需要注意的是：正交投影对顶点变换后，w依然是1
 			* 用于判断变换后顶点是否位于视椎体内的不等式和透视投影一样。都是要三个分量全部在[-w,w]之间。
 * 4.6.8 屏幕空间
@@ -300,18 +303,18 @@
 
 ### 5.2  简单的顶点/片元着色器
 
-![](D:\gitwork\LearningNotes.github\图形学\Pictures\1.png)
+![](Pictures\1.png)
 
 + 例子1：
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\2.png)
+  ![](Pictures\2.png)
 
   要点：
 
   + 语句块基本是固定的
   + pragma声明了函数的作用，传入参数的语义限定说明了传入参数的性质。
 + 例子2:
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\3.png)
+  ![](Pictures\3.png)
   要点:
   + 传入多个参数时用结构体，语义限定就在结构体各个参数后面写。一般结构体的名称也是有含义的：
     + a2v（application To vertex应用到顶点）
@@ -323,7 +326,7 @@
 
 + 例子1：
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\4.png)
+  ![](Pictures\4.png)
 
 + 要点：
 
@@ -336,14 +339,14 @@
 
 + 例子1：颜色拾取器
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\5.png)
+  ![](Pictures\5.png)
 
   要点：
 
   + ShaderLab的属性相当于变量声明，传入一些参数，如贴图，颜色之类。后面pass要用的时候就得用CG语言再定义变量，且类型和名称得与Properties中的相匹配。
   + uniform fixed4 _Color。uniform可省略。
 
-![](D:\gitwork\LearningNotes.github\图形学\Pictures\6.png)
+![](Pictures\6.png)
 
 ### 5.3 Unity的内置文件与变量
 
@@ -351,17 +354,17 @@
 
 + 类似头文件，也是#include "name"。但后缀为cginc
 
-![](D:\gitwork\LearningNotes.github\图形学\Pictures\7.png)
+![](Pictures\7.png)
 
 + UnityCG.cginc
 
   + 常用结构体
 
-    ![](D:\gitwork\LearningNotes.github\图形学\Pictures\8.png)
+    ![](Pictures\8.png)
 
   + 常用帮助函数
 
-    ![](D:\gitwork\LearningNotes.github\图形学\Pictures\9.png)
+    ![](Pictures\9.png)
 
     联系记忆：模型空间是物体自身的空间，比如子物体的transform就显示的是在父物体模型空间下的坐标旋转数据。而没有父物体的就是世界坐标。
 
@@ -373,17 +376,58 @@
 + 有的语义有特别规定。如TEXCOORD0，在顶点着色器的输入结构体中，unity将模型的第一组纹理的坐标存入其中。而在其输出中，就能由自己决定了。
 + 带SV的表示system-value，这些叫系统数值语义。SV_POSITION表示其次裁剪空间的坐标。
 
-#### 5.2.4 Unity支持的语义
+#### 5.4.2 Unity支持的语义
 
 + a2v的常用语义
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\10.png)
+  ![](Pictures\10.png)
 
   注：
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\11.png)
+  ![](Pictures\11.png)
 
 + v2f的常用语义
 
-  ![](D:\gitwork\LearningNotes.github\图形学\Pictures\12.png)
+  ![](Pictures\12.png)
+  
+  一般地，如果要把自定义的一些数据传给片元着色器，则用TEXCOORD0
+
++ 5.4.3 定义复杂变量
+  + 一般没法直接定义矩阵，float4x4得拆成4个float4
+
+### 5.5 Debug
+
+### 5.6 渲染平台的差异
+
+#### 5.6.1 渲染纹理的坐标差异
+
+![](D:\LearningNotes.github\图形学\Pictures\13.png)
+
+一般情况下，在DirectX平台上，Unity会自动翻转，但当开启抗锯齿（Edit->Project Settings->Quality->Anti Aliasing）时不会，因为此时会使主纹理的问纹素大小在竖直方向上变为负值，以便对主纹理采样，这时得把其它纹理进行竖直方向上的翻转。这时要在顶点着色器中反转某些渲染纹理的纵坐标，如深度纹理，亮部纹理。噪声纹理一般不处理。
+
+![](D:\LearningNotes.github\图形学\Pictures\14.png)
+
+### 5.7 Shader代码规范化
+
+#### 5.7.1 float、half、fixed选择
+
+![](D:\LearningNotes.github\图形学\Pictures\15.png)
+
++ 桌面float，移动测试决定。fixed基本不用，被half代替。
++ 一般用fixed存颜色及单位矢量
+
+#### 5.7.3 避免不必要的计算
+
++ 后果：寄存器数目不足
+
+![](D:\LearningNotes.github\图形学\Pictures\16.png)
+
+#### 5.7.4 慎用分支和循环
+
++ 由于if-else，for，while在GPU中实现方式与CPU不同，性能耗费大，应少用。
++ 解决办法是：计算向渲染管线上端移动，如把片元着色器的计算放到顶点着色器，或直接在CPU中与计算，把结果传shader。
+
+#### 5.7.4 别除0
+
+# 第六章 Unity中的基础光照
 
