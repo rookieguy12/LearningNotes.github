@@ -1,0 +1,775 @@
+Using pre-set license
+Built from '2020.3/staging' branch; Version is '2020.3.4f1 (0abb6314276a) revision 703331'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Pro; OS build 19042.1110; Version 2009; 64bit' Language: 'zh' Physical Memory: 32515 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+D:\Unity\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+D:/LearningNotes.github/图形学/ShaderLearning/VFX Example
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+53323
+Successfully changed project path to: D:/LearningNotes.github/图形学/ShaderLearning/VFX Example
+D:/LearningNotes.github/图形学/ShaderLearning/VFX Example
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 41.47 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.4f1 (0abb6314276a)
+[Subsystems] Discovering subsystems at path D:/Unity/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/LearningNotes.github/图形学/ShaderLearning/VFX Example/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1660 SUPER (ID=0x21c4)
+    Vendor:   
+    VRAM:     5991 MB
+    Driver:   27.21.14.6192
+Initialize mono
+Mono path[0] = 'D:/Unity/Editor/Data/Managed'
+Mono path[1] = 'D:/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'D:/Unity/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56204
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: D:/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.000826 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 40.09 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.824 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.000805 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 43.95 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.824 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Shader 'Universal Render Pipeline/Particles/Lit': fallback shader 'Universal Render Pipeline/Particles/SimpleLit' not found
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.06 seconds
+Refreshing native plugins compatible for Editor in 0.52 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2946 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 129.5 MB.
+System memory in use after: 126.8 MB.
+
+Unloading 45 unused Assets to reduce memory usage. Loaded Objects now: 3353.
+Total: 3.310800 ms (FindLiveObjects: 0.248300 ms CreateObjectMapping: 0.132400 ms MarkObjects: 1.762200 ms  DeleteObjects: 1.167100 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e31923a9acff7ab19d62bbb88a68da1f') in 0.022230 seconds
+  Import took 0.025903 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.427404 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7a7eb6ec64d452e10967aa5d0177bf22') in 0.002829 seconds
+  Import took 0.006427 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.215616 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7a7eb6ec64d452e10967aa5d0177bf22') in 0.002379 seconds
+  Import took 0.006293 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 132.558023 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e7aa501b11d2771986acd5afce29a0dc') in 0.002609 seconds
+  Import took 0.007065 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 28.656725 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a83d12d0585da9e50cf37ce1335866fc') in 0.002431 seconds
+  Import took 0.006127 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 14.559251 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '687bafcff85071f46b54cb4dcc41bd83') in 0.002424 seconds
+  Import took 0.006195 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.924825 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f32da6e0ae7b56ad22f4fe7b4260243b') in 0.002311 seconds
+  Import took 0.005836 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.221942 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b17371fa0c1c28dbb4a1d4803ff0cb49') in 0.002513 seconds
+  Import took 0.006428 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002714 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b17371fa0c1c28dbb4a1d4803ff0cb49') in 0.002563 seconds
+  Import took 0.006636 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.045947 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '48ec874a074c4aae7e205662e39539ae') in 0.002426 seconds
+  Import took 0.006258 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 13.071189 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2fbd502a66efffb45ca9d656d6e64c89') in 0.002274 seconds
+  Import took 0.005844 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 15.582452 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f1b403eb6ec68894d967419669a234df') in 0.002751 seconds
+  Import took 0.006496 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.613748 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '954bd17e43d506218e629d1feb5635a4') in 0.002589 seconds
+  Import took 0.006699 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 379.066969 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '816fbbe1cb61d5652cab48f3c111863e') in 0.003255 seconds
+  Import took 0.009457 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 294.503530 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '595c6f506337b030d7e78707c72bfb6c') in 0.002851 seconds
+  Import took 0.007056 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 165.467738 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '474d494e6d89119631fbfb0f581a0321') in 0.004878 seconds
+  Import took 0.011166 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.603138 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7a51fc48f40b80cc4e98806222d66578') in 0.002519 seconds
+  Import took 0.006218 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.048685 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1bcd5bfbec27e76b57a605a1fdf55de') in 0.002802 seconds
+  Import took 0.006630 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.680094 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf9fd88740f5dae90c41d6b0ce312f1e') in 0.002546 seconds
+  Import took 0.006326 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.800552 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fd847b9cebde417507c4aa2c0917e8d6') in 0.002319 seconds
+  Import took 0.006357 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 17.070387 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '431d074658be85d37958c30eaa8645a5') in 0.002402 seconds
+  Import took 0.006084 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 458.681405 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7edcad19dd4e49eee95cdc2f1f57d7f9') in 0.002737 seconds
+  Import took 0.006977 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 105.412065 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2b3ec4845d82706fec86c1cc30247f75') in 0.003042 seconds
+  Import took 0.006904 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 30.528930 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'df8af9a85bf5236932ae6029f11939c0') in 0.002431 seconds
+  Import took 0.006001 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 157.463798 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a41445660794ebbda9f9761e7a800be1') in 0.003449 seconds
+  Import took 0.007571 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.218860 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'db8a4a021aee5ae5bf1d8bc2d3862d8f') in 0.002325 seconds
+  Import took 0.005895 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 204.982878 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7fc74d16a0280f02167d6fd8f3f59f89') in 0.003392 seconds
+  Import took 0.008044 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000976 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7fc74d16a0280f02167d6fd8f3f59f89') in 0.003947 seconds
+  Import took 0.007375 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.619144 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c196054297cf2a1383858b231dff3658') in 0.002983 seconds
+  Import took 0.006966 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.831175 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e145895e311a644110b78a8fbcb6f7ed') in 0.002948 seconds
+  Import took 0.006558 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 42.507242 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9ea5f1cfaaf2c802a2f9b9b5cb1d12f7') in 0.002638 seconds
+  Import took 0.006541 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.004068 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9ea5f1cfaaf2c802a2f9b9b5cb1d12f7') in 0.002539 seconds
+  Import took 0.005891 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 565.645374 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '54724ededfbfccd36ea746ea2025e4ac') in 0.002749 seconds
+  Import took 0.007058 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 192.577185 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '833ac13a79a706e478b125136fca9c72') in 0.002991 seconds
+  Import took 0.007108 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 79.027605 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa791519d6fcf25bc9a284096889df69') in 0.003122 seconds
+  Import took 0.007937 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 252.552084 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b7ee1ecc5c95a4ba5394db39781fc7c') in 0.002498 seconds
+  Import took 0.006768 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 51.579394 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7f322b1b84aa12ba5a8987a4e9711cc1') in 0.004933 seconds
+  Import took 0.009515 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.778302 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5877ec89211e747a2e57ac1235028f3') in 0.002365 seconds
+  Import took 0.005948 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001355 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5877ec89211e747a2e57ac1235028f3') in 0.002641 seconds
+  Import took 0.005938 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 48.207069 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f3a30240a97db1f27deea97a6b16a3ec') in 0.004423 seconds
+  Import took 0.010273 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.529568 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3c3516a4bf6a934e0b92657523a53126') in 0.002402 seconds
+  Import took 0.006374 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 24.410628 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f044b4204f4ccd791355328ecbf4e6c') in 0.002323 seconds
+  Import took 0.006525 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001669 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f044b4204f4ccd791355328ecbf4e6c') in 0.002171 seconds
+  Import took 0.005766 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 51.129122 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7cc6919d645df6ab1bccb67fde8d1e75') in 0.002258 seconds
+  Import took 0.006766 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001390 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7cc6919d645df6ab1bccb67fde8d1e75') in 0.002153 seconds
+  Import took 0.005378 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 24.021194 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '50300520491972b5bdc2a04ae2864857') in 0.002579 seconds
+  Import took 0.006272 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 337.003722 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c09d105f7e9c4f23f4d8e7659e77b74') in 0.002816 seconds
+  Import took 0.007204 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.012208 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c09d105f7e9c4f23f4d8e7659e77b74') in 0.002944 seconds
+  Import took 0.008704 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 65.727544 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c6fd5fe2f39c7c3578e0e1b9a9d7efb') in 0.002456 seconds
+  Import took 0.006617 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002254 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c6fd5fe2f39c7c3578e0e1b9a9d7efb') in 0.002525 seconds
+  Import took 0.007340 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 282.711530 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c8aa47afa988dcc10b08dc8f88804e2') in 0.002743 seconds
+  Import took 0.007443 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 25.468734 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e89d1778605861be852b2cd4cdfff76') in 0.005642 seconds
+  Import took 0.012040 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.776976 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '935a4f8647701a402ceade69d237fb3f') in 0.002389 seconds
+  Import took 0.005965 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.715732 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5bac4fe931b4203d966d70913d548e7f') in 0.002731 seconds
+  Import took 0.007060 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002020 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5bac4fe931b4203d966d70913d548e7f') in 0.002783 seconds
+  Import took 0.007318 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.981474 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4fbaeb52b8771afe1f0f1767fe38e5cc') in 0.002864 seconds
+  Import took 0.006655 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.692092 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4369fe7d15e0240a875fbe18653aa287') in 0.003898 seconds
+  Import took 0.010234 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 29.645837 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd95d0f0b44143f57edee53ec75bc3d77') in 0.004769 seconds
+  Import took 0.010515 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003792 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd95d0f0b44143f57edee53ec75bc3d77') in 0.002650 seconds
+  Import took 0.006012 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.109790 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd78558f614cc678a8a5b77715bf8eb3d') in 0.003001 seconds
+  Import took 0.008151 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.275922 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8188a587e2b63e7e4dd629ed80e9b35f') in 0.002283 seconds
+  Import took 0.005649 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.005065 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8188a587e2b63e7e4dd629ed80e9b35f') in 0.002328 seconds
+  Import took 0.006219 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.563176 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '68737c82f687bba66fa03ee14d2a70b9') in 0.003613 seconds
+  Import took 0.008228 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 48.404931 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a9dd1f2c880aadcf59fcd978a781e720') in 0.002839 seconds
+  Import took 0.006504 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 23.612508 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '85a27ecde8387eb224f03a89c90e1f08') in 0.002503 seconds
+  Import took 0.006230 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 38.857992 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2803f1601a361b519cad5a186d2bc04') in 0.004104 seconds
+  Import took 0.008159 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.005130 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a2803f1601a361b519cad5a186d2bc04') in 0.006437 seconds
+  Import took 0.013913 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 28.059628 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '28748ab3f4ac4731ef3ed70da103d31b') in 0.002950 seconds
+  Import took 0.006875 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 37.439341 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6df73669a4bfd719a436636cb30d1b31') in 0.003272 seconds
+  Import took 0.008277 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 19.549899 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4abfeaa0e6c4900ee11fae824ac882d5') in 0.003697 seconds
+  Import took 0.008297 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.857035 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '35c07908defec7ec1e7c2c0ab18bfa6a') in 0.003092 seconds
+  Import took 0.006832 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 57.573678 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3a7cd2426c8d510293de37f225586f76') in 0.004404 seconds
+  Import took 0.009591 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 47.567930 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b484714e64ba9b03d02055330aa5c75') in 0.003138 seconds
+  Import took 0.007102 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 54.259850 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f3b279be7d79775a05faff9e2707342') in 0.004132 seconds
+  Import took 0.008039 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 97.343574 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '29329bdf7952b3d2e739970833a82110') in 0.003919 seconds
+  Import took 0.007959 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 24.097553 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b9356f3cb0a5e37da7259253cb26f858') in 0.003083 seconds
+  Import took 0.006722 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 48.454802 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8e1bc4ac79f8126c02f6287ade5e39f9') in 0.003151 seconds
+  Import took 0.007240 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.422714 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b52ef794b770c240e60d3d85ecddb6ad') in 0.003341 seconds
+  Import took 0.006924 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.276985 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '29a58c65b1e0cabaca292274e9ba794e') in 0.003250 seconds
+  Import took 0.007049 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 84.522940 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '78cb3b938a7840d0882023de8b0e1fc6') in 0.003264 seconds
+  Import took 0.007204 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.897316 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8caad97d000839d84a20f413be3d65ba') in 0.003205 seconds
+  Import took 0.006919 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.838863 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '091061dce7ae8189897c967e1afe7246') in 0.005319 seconds
+  Import took 0.012002 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003678 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '091061dce7ae8189897c967e1afe7246') in 0.003431 seconds
+  Import took 0.007545 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 59.853801 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd7e7e078979ccde0fbf031e7e6618954') in 0.003436 seconds
+  Import took 0.007042 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 32.684237 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '79b57a5e87de1d73a5603a12d1c8303f') in 0.003891 seconds
+  Import took 0.007643 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 400.471258 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f6040665d92bcec369162fdfa9e91bed') in 0.004109 seconds
+  Import took 0.008808 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.497220 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e428b71a713197ce8e386821a0d39958') in 0.006990 seconds
+  Import took 0.013090 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 123.365601 seconds.
+  path: Assets/VFXEample/New VFX.vfx
+  artifactKey: Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/VFXEample/New VFX.vfx using Guid(8ae5bdf9ef821e344a286b1f714625e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd474ebd0f6f80a73fc14b81d14a579dc') in 0.003850 seconds
+  Import took 0.008031 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
