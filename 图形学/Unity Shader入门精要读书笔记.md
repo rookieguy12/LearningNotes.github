@@ -401,17 +401,17 @@
 
 #### 5.6.1 渲染纹理的坐标差异
 
-![](D:\LearningNotes.github\图形学\Pictures\13.png)
+![](Pictures\13.png)
 
 一般情况下，在DirectX平台上，Unity会自动翻转，但当开启抗锯齿（Edit->Project Settings->Quality->Anti Aliasing）时不会，因为此时会使主纹理的问纹素大小在竖直方向上变为负值，以便对主纹理采样，这时得把其它纹理进行竖直方向上的翻转。这时要在顶点着色器中反转某些渲染纹理的纵坐标，如深度纹理，亮部纹理。噪声纹理一般不处理。
 
-![](D:\LearningNotes.github\图形学\Pictures\14.png)
+![](Pictures\14.png)
 
 ### 5.7 Shader代码规范化
 
 #### 5.7.1 float、half、fixed选择
 
-![](D:\LearningNotes.github\图形学\Pictures\15.png)
+![](Pictures\15.png)
 
 + 桌面float，移动测试决定。fixed基本不用，被half代替。
 + 一般用fixed存颜色及单位矢量
@@ -420,14 +420,929 @@
 
 + 后果：寄存器数目不足
 
-![](D:\LearningNotes.github\图形学\Pictures\16.png)
+![](Pictures\16.png)
 
 #### 5.7.4 慎用分支和循环
 
 + 由于if-else，for，while在GPU中实现方式与CPU不同，性能耗费大，应少用。
 + 解决办法是：计算向渲染管线上端移动，如把片元着色器的计算放到顶点着色器，或直接在CPU中与计算，把结果传shader。
 
-#### 5.7.4 别除0
+#### 5.7.4 别除以0
 
 # 第六章 Unity中的基础光照
 
++ 像素颜色 = 可见性 + 光照
+
+## 6.1 如何观察世界
+
+### 6.1.1 光源
+
+### 6.1.2  吸收和散射
+
++ 散射只改变光线方向，不改变光线密度和颜色，吸收改变光的密度和颜色，不改变光线方向
++ 光线在物体表面散射：
+  + 一部分散射到外部，即反射。一般用specular来代表
+  + 一部分继续到内部，部分经过多次散射可能出表面，即漫反射。一般用diffuse代表
+
+### 6.1.3 着色
+
++ 着色：根据材质属性（如diffuse属性）、光源信息（如lightDirection， lightColor）用等式计算沿某个方向的出射度的过程。
++ 该等式一般称光照模型
+
+### 6.1.4 BRDF模型
+
++ BRDF可以在给出入射光线的方向和辐照度后给出某个出射方向的光照能量分布
+
+## 6.2 标准光照模型（Blinn-Phong）
+
++ 特点：
+
+  + 只关心直接光照
+
++ 基本组成
+
+  + 环境光：c<sub>ambient</sub> = globalAmbient
+
+  + 自发光：c<sub>emissive</sub> = m<sub>emissive</sub> 使用材质的自发光颜色
+
+  + 漫反射：
+
+    + 遵循兰伯特定律
+
+    + **兰伯特定律**
+
+      **c<sub>diffuse</sub> = (c<sub>light</sub>  * m<sub>diffuse</sub>) max(0, normalDirection * lightDirection)**
+
+    + **半兰伯特定律**
+
+      **c<sub>diffuse</sub> = (c<sub>light</sub>  * m<sub>diffuse</sub>) (a * normalDirection * lightDirection + b)**
+
+      当a = b = 0.5时就为半兰伯特模型，实现阴影面的加光
+
+  + 高光反射：
+    + 反射方向r：
+      + r = 2 [ n · l ] · n - l
+    + 对于Phong模型，没使用半程向量
+      + **c<sub>specular</sub> = (c<sub>light</sub>  * m<sub>specular</sub>) * pow(max(0, viewDirection* reflectDirection), m<sub>gloss</sub>**)
+    + 对于Blinn-Phong模型，则使用半程向量
+      + halfway = normalize(lightDirection + viewDireciton)
+      + **c<sub>specular</sub> = (c<sub>light</sub>  * m<sub>specular</sub>) * pow(max(0, normal · halfway), m<sub>gloss</sub>**)
+
+### 6.2.5 逐像素&逐顶点
+
++ vertex为顶点着色，frag为片元着色
+
++ **Phong着色：在frag中，会以每个像素为基础得到其法线，可以从顶点法线差值得到，也可以从法线纹理采样得到。**
+
+  **这种在面间插值顶点法线的技术为Phong着色**
+
++ Gouraud着色：在每个顶点上计算光照，在渲染图元内部进行线性插值。
+  + 优点：
+    + 一般地，顶点数量<像素数量，计算量会小些
+  + 缺点：
+    + 插值是线性的，对于非线性的光照，如Specular，产生问题。所以一般放到frag里面处理和计算
+    + 插值时是对渲染图元内部的顶点的颜色插值，导致其颜色总是暗于顶点的最高颜色值
+
+### 6.2.6 局限性
+
++ 菲涅尔反射问题
++ 是各向同性的，对于各向异性很难搞
+
+## 6.6 Unity内置函数
+
+![](pictures/17.png)
+
++ 用前记得归一化
+
+# 第七章  基础纹理
+
++ 纹理映射：又称纹理贴图，是将纹理空间中的纹理像素映射到屏幕空间中的像素的过程
++ 纹理映射坐标：也称uv坐标。一般在0到1.但是采样时的纹理坐标可能不在0到1，要看_MainTex_ST怎么设置的uv
++ **OpenGL里面纹理空间的原点在左下角，DirectX在左上角**
+
+## 7.1 单张纹理
+
+```glsl
+Shader "Unity Shaders Book/Chapter7/Single Texture"
+{
+    Properties
+    {
+        _Color("Color Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white" {}//定义纹理
+        _Specular("Specular", Color) = (1,1,1,1)
+        _Gloss("Gloss", Range(8, 256)) = 20
+    }
+
+    SubShader
+    {
+        pass
+        {
+            Tags
+            {
+                "LightMode" = "ForwardBase"//设置光照模式为前向渲染
+            }
+            CGPROGRAM
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;//纹理定义一个sampler2D和一个偏移缩放
+            fixed4 _Specular;
+            float _Gloss;
+
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float3 worldNormal : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+                float2 uv : TEXCOORD2;
+            };
+
+            v2f vert(a2v v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+                o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+                //等价于o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST_zw;
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                fixed3 worldNormal = normalize(i.worldNormal);
+                fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                fixed3 viewDirection = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                fixed3 halfway = normalize(viewDirection + worldLightDir);
+
+                fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldLightDir, worldNormal));
+                
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(halfway, worldNormal)), _Gloss);
+
+                return fixed4(ambient + diffuse + specular, 1.0);
+            }
+            ENDCG
+
+        }
+    }
+    Fallback "Specular"
+}
+```
+
+## 7.2 凹凸映射
+
++ 凹凸映射分成两种。一种是高度纹理，其模拟表面位移，通过算梯度得到normal的x和y，再叉乘得到normal的z。一种是法线纹理，其存储了顶点切线空间下的normal的x和y，由归一化的特性得到z值，进而得到切线空间下的normal。一般凹凸映射指后者
+
+### 7.2.2 法线纹理
+
+> 常见的映射方式就是pixel = (normal + 1)  / 2
+
+### 7.2.3 法线贴图实践代码
+
+#### 1. 切线空间
+
+```glsl
+Shader "Untiy Shaders Book/Chapter 7/Normal Map In Tangent Space"
+{
+    Properties
+    {
+        _Color ("Color Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white" {}//主纹理
+        _BumpMap("Normal Map", 2D) = "bump" {}//法线贴图
+        _BumpScale("Bump Scale", float) = 1.0//缩放比例
+        _Specular("Specular", Color) = (1,1,1,1)
+        _Gloss("Gloss", Range(8,256)) = 20.0
+    }
+    SubShader
+    {
+        pass
+        {
+            Tags
+            {
+                "LightMode" = "ForwardBase"
+            }
+            CGPROGRAM
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            fixed4 _Color;
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;//偏移值
+
+            sampler2D _BumpMap;
+            float4 _BumpMap_ST;//一般偏移是相同的，不同的时候v2f的uv得用float4了
+
+            float _BumpScale;
+            fixed4 _Specular;
+            float _Gloss;
+
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float4 texcoord : TEXCOORD0;//定义模型顶点的纹理映射坐标
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float4 uv : TEXCOORD0;
+                float3 lightDir : TEXCOORD1;
+                float3 viewDir : TEXCOORD2;
+            };
+
+            v2f vert(a2v v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                
+                //得到模型顶点的纹理映射坐标，第一个对应于第一个纹理，第二个则是法线贴图的，不过一般而言都是建模出来的，两个是一样的，这里不一样
+                o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+                o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+                TANGENT_SPACE_ROTATION;
+                //等价于float3 binormal = cross(v.normal, v.tangent.xyz) * v.tangent.w;
+                //float3x3 rotation = float3x3(v.tangent.xyz, binormal, v.normal); 
+
+                o.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex));
+                o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex));
+                
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                fixed3 tangentLightDirection = normalize(i.lightDir);
+                fixed3 tangentViewDir = normalize(i.viewDir);
+
+                //采样得到切线空间的法线
+                fixed4 packedNormal = tex2D(_BumpMap, i.uv.zw);
+                fixed3 tangentNormal;
+                //如果用的法线贴图的纹理没标记为法线贴图，则
+                //tangentNormal.xy = (2 * packedNormal.uv - 1) * _BumpScale;
+                //tangentNormal.z = sqrt(1 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
+
+                //一般都标记为NormalMap，这样它会给你压缩，只用UnpackNormal就能解压并完成 2* packedNormal.uv操作
+                tangentNormal = UnpackNormal(packedNormal);
+                tangentNormal.xy *= _BumpScale;
+                tangentNormal.z = sqrt(1 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
+
+                fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
+                
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+                fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(tangentLightDirection,  tangentNormal));
+
+                fixed3 halfWay = normalize(tangentLightDirection + tangentViewDir);
+                fixed3 specular = _Specular * _LightColor0.rgb * pow(saturate(dot(halfWay, tangentNormal)), _Gloss);
+
+                return fixed4(ambient + diffuse + specular, 1);
+            }   
+            ENDCG
+        }
+    }
+    Fallback "Specular"
+}
+```
+
+#### 2.世界空间
+
+```glsl
+Shader "Untiy Shaders Book/Chapter 7/Normal Map In World Space"
+{
+    Properties
+    {
+        _Color("Color Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white" {}
+        _BumpMap("Bump Map", 2D) = "bump" {}
+        _BumpScale("Bump Scale", float) = 1
+        _Specular("Specular", Color) = (1,1,1,1)
+        _Gloss("Gloss", Range(-80, 200)) = 20
+    }
+    SubShader
+    {
+        pass
+        {
+            Tags
+            {
+                "LightMode" = "ForwardBase"
+            }
+            CGPROGRAM
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            fixed4 _Color;
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+
+            sampler2D _BumpMap;
+            float4 _BumpMap_ST;
+
+            float _BumpScale;
+            fixed4 _Specular;
+            float _Gloss;
+
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float4 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float4 uv : TEXCOORD0;
+                float4 TtoW0 : TEXCOORD1;
+                float4 TtoW1 : TEXCOORD2;
+                float4 TtoW2 : TEXCOORD3;
+            };
+
+            v2f vert(a2v v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                
+                //得到模型顶点的纹理映射坐标，第一个对应于第一个纹理，第二个则是法线贴图的，不过一般而言都是建模出来的，两个是一样的，这里不一样
+                o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+                o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+                TANGENT_SPACE_ROTATION;
+                //等价于float3 binormal = cross(v.normal, v.tangent.xyz) * v.tangent.w;
+                //float3x3 rotation = float3x3(v.tangent.xyz, binormal, v.normal); 
+
+                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
+                fixed3 worldTangent = UnityObjectToWorldDir(v.tangent);
+                fixed3 worldBiNormal = cross(worldNormal, worldTangent) * v.tangent.xyz;
+
+                o.TtoW0 = float4(worldTangent.x, worldBiNormal.x, worldNormal.x, worldPos.x);
+                o.TtoW1 = float4(worldTangent.y, worldBiNormal.y, worldNormal.y, worldPos.y);
+                o.TtoW2 = float4(worldTangent.z, worldBiNormal.z, worldNormal.z, worldPos.z);
+                
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+                fixed3 worldLightDirection = normalize(UnityWorldSpaceLightDir(worldPos));
+                fixed3 worldViewDirection = normalize(UnityWorldSpaceViewDir(worldPos));
+
+                fixed3 tangentNormal;
+                tangentNormal.xy = UnpackNormal(tex2D(_BumpMap, i.uv.zw)).xy * _BumpScale;
+                tangentNormal.z = sqrt(1 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
+                float3x3 rotation = float3x3(i.TtoW0.xyz, i.TtoW1.xyz, i.TtoW2.xyz);
+                fixed3 worldNormal = normalize(mul(rotation, tangentNormal));
+
+                fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
+                
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+                fixed3 diffuse = _LightColor0.rgb * albedo * saturate(dot(worldLightDirection,  worldNormal));
+
+                fixed3 halfWay = normalize(worldLightDirection + worldViewDirection);
+                fixed3 specular = _Specular * _LightColor0.rgb * pow(saturate(dot(halfWay, worldNormal)), _Gloss);
+
+                return fixed4(ambient + diffuse + specular, 1);
+            }
+            ENDCG
+        }
+    }
+}
+```
+
+## 7.3 渐变纹理
+
++ 用途：得到插画风格的渲染效果
+
+```glsl
+Shader "Unity Shaders Book/Chapter 7/Ramp Texture" {
+	Properties {
+		_Color ("Color Tint", Color) = (1, 1, 1, 1)
+		_RampTex ("Ramp Tex", 2D) = "white" {}//定义渐变纹理贴图
+		_Specular ("Specular", Color) = (1, 1, 1, 1)
+		_Gloss ("Gloss", Range(8.0, 256)) = 20
+	}
+	SubShader {
+		Pass { 
+			Tags { "LightMode"="ForwardBase" }
+		
+			CGPROGRAM
+			
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Lighting.cginc"
+			
+			fixed4 _Color;
+			sampler2D _RampTex;
+			float4 _RampTex_ST;//定义纹理及其Scale&Translation
+			fixed4 _Specular;
+			float _Gloss;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;//不使用模型的纹理坐标进行采样
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+			};
+			
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+				
+				return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+				fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+
+                //主要不同在于：
+                //1，ambient没有采样纹理结果，二是直接用了全局光
+                //2. diffuse不是使用纹理映射坐标uv.xy采样，而是直接用half-Lambert采样，因为half-Lambert也在0到1
+                //3. specular不变，还是一样用半程向量
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+				
+				// Use the texture to sample the diffuse color
+				fixed halfLambert  = 0.5 * dot(worldNormal, worldLightDir) + 0.5;
+                
+				fixed3 diffuseColor = tex2D(_RampTex, fixed2(halfLambert, halfLambert)).rgb * _Color.rgb;
+				fixed3 diffuse = _LightColor0.rgb * diffuseColor;
+				
+				
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+				
+				return fixed4(ambient + diffuse + specular, 1.0);
+			}
+			ENDCG
+		}
+	}
+	FallBack "Specular"
+}
+```
+
+## 7.4 遮罩纹理
+
++ 流程：
+  1. 采样得到这招纹理的texel的值
+  2. 利用其中某些个通道值和某种表面属性相乘。一般地，多个通道可分别控制不同光照
++ 作用：
+  + 实现像素级别控制模型表面的各种属性
+
+### 7.4.1 遮罩纹理实践
+
+```glsl
+Shader "Unity Shaders Book/Chapter 7/Mask Texture"
+{
+    Properties
+    {
+        _Color("Color Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white" {}
+        _BumpMap("Normai Map", 2D) = "bump"{}
+        _BumpScale("Bump Scale", float) = 1
+        _SpecularMask("Specular Mask", 2D) = "white" {}
+        _SpecularScale("Specular Scale", float) = (1,1,1,1)//定义高光遮罩纹理
+        _Specular("Specular", Color) = (1,1,1,1)
+        _Gloss("Gloss", Range(8.0, 256)) = 20
+    }
+    SubShader
+    {
+        pass
+        {
+            Tags
+            {
+                "LightMode" = "ForwardBase"
+            }
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;//都使用的一个偏移缩放值，所以就只定义一个即可
+            sampler2D _BumpMap;
+            float _BumpScale;
+            sampler2D _SpecularMask;
+            float _SpecularScale;
+            fixed4 _Specular;;
+            float _Gloss;
+
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float4 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                float3 lightDir : TEXCOORD1;
+                float3 viewDir : TEXCOORD2;
+            };
+
+            v2f vert(a2v v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);//都使用一个纹理属性_MainTex_ST
+                TANGENT_SPACE_ROTATION;
+                o.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex));
+                o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex));//转到切线空间计算
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                fixed3 tangentLightDirection = normalize(i.lightDir);
+                fixed3 tangentViewDirection = normalize(i.viewDir);
+
+                fixed3 tangentNormal = UnpackNormal(tex2D(_BumpMap, i.uv)).xyz;
+                tangentNormal.xy *= _BumpScale;
+                tangentNormal.z = sqrt(1 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));
+                //计算normal
+
+                fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(tangentNormal, tangentLightDirection));
+
+                fixed3 halfDir = normalize(tangentLightDirection + tangentViewDirection);
+                fixed specularMask = tex2D(_SpecularMask, i.uv.xy).r * _SpecularScale;
+
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(halfDir, tangentNormal)),_Gloss) * specularMask;//使用遮罩纹理的r通道控制specular
+
+                return fixed4(ambient + diffuse + specular, 1.0);
+            }
+            ENDCG
+        }
+    }
+    Fallback "Specular"
+}
+```
+
+# 第八章 透明效果
+
++ 渲染顺序与深度缓冲：
+  + 场景渲染时，对于不同的物体有着不同的渲染先后顺序，这是使用**z-buffer**完成的。深度缓冲是用于解决可见性问题的。基本思想：在物体开启深度测试的情况下，渲染一个片元时，需要把它的深度值与已经存在于深度缓冲中的值进行比较，如果距离相机更远，则舍去；更近或者深度缓冲没值，就覆盖或者存入深度值。
+
++ 实现透明效果的方法：
+  + 透明度测试：
+    + 基本思想：如果alpha小于某个值，就舍去，否则按正常渲染不透明物体方式进行渲染。
+    + 特点：
+      + 不关闭深度写入
+      + 效果极端，要么看的见，要么看不见
+  + 透明度混合
+    + 基本思想：使用当前片元透明度作混合因子，与已经存储在颜色缓冲中的颜色值进行混合，得到新颜色。
+    + 特点：
+      + 关闭深度写入，但深度测试还是有。深度缓冲是只读不写的。
+      + 可以实现真正的半透明效果
+
+## 8.1 渲染顺序的重要性
+
++ 问题：渲染一个半透明物体和不透明物体，且透明物体先渲染，不透明物体后渲染，在半透明物体开启深度写入的情况下，不透明物体被cull掉，而不开启深度写入时，由于半透明物体要混合颜色，则不透明的得先渲染。即使是两个不透明的物体，渲染顺序不同，混合的等式也不同，也要注意渲染顺序
++ 常用方法：
+  + 先渲染所有不透明物体，对不透明物体开启深度测试和深度写入
+  + 对半透明物体按照从后往前顺序渲染，要关闭深度写入
++ 依然存在的问题：
+  + 三个半透明物体循环重叠，无法判断哪个在前，任意一个顺序都错
+    + 一般要进行网格分割，或者尽可能让模型是凸面体，将模型进行拆分
+
+## 8.2 Unity Shader的渲染顺序
+
+![](pictures/18.png)
+
++ 代码示例：
+
+  ![](pictures/19.png)
+
+## 8.3 透明度测试
+
+```glsl
+Shader "Unity Shaders Book/Chapter8/Alpha Test"
+{
+    Properties
+    {
+        _Color("Main Tint", Color) = (1,1,1,1)
+        _MainTex("Main Tex", 2D) = "white"{}
+        _Cutoff("Alpha Cutoff", Range(0,1)) = 0.5//定义剔除的阀值
+    }
+    SubShader
+    {
+        Tags
+        {
+            "Queue" = "AlphaTest"	//设置渲染队列
+            "IgnoreProjector" = "True"//忽略投影器影响
+            "RenderType" = "TransparentCutout"//指明渲染类型，让unity将shader归到TranspareCutout组
+        }
+        pass
+        {
+            Tags{
+                "LightMode" = "ForwardBase"
+            }
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag 
+            #include "Lighting.cginc"
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            fixed _Cutoff;
+
+            struct a2v
+            {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float3 worldNormal : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+                float2 uv : TEXCOORD2;
+            };
+
+            v2f vert(a2v v)
+            {
+                v2f o;
+                o.pos =  UnityObjectToClipPos(v.vertex.xyz);
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.worldPos =  mul(unity_ObjectToWorld, v.vertex.xyz);
+                o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                fixed3 worldNormal = normalize(i.worldNormal);
+                fixed3 worldLightDirection = normalize(UnityWorldSpaceLightDir(i.worldPos));
+
+                fixed4 texColor = tex2D(_MainTex, i.uv);
+                clip(texColor.a - _Cutoff);
+                //等价于if ((texColor.a - _Cutoff) < 0) discard;这里就是透明度测试
+
+                fixed3 albedo = texColor.rgb * _Color;
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldLightDirection, worldNormal));
+                return fixed4(diffuse + ambient, 1);
+            }
+            ENDCG
+        }
+    }
+    Fallback "Transparent/Cutout/VertexLit"
+}
+```
+
+## 8.4 透明度混合
+
++ Blend命令
+
+  ![](pictures/20.png)
+
++ Blend命令里的混合因子
+
+![](pictures/21.png)
+
++ 混合操作
+
+  见P174到P175
+
+### 8.4.1 透明度混合实例
+
++ 当不开启深度写入时，对于物体本身交错的情况会因为渲染片元顺序产生问题，会导致后面的部分显示在前面。解决办法是使用两个pass，第一个pass开启深度写入，但不输出颜色。第二个才关闭深度写入，由于预先已经存在了深度缓冲，对于前后两个片元，后面的那个会被剔除掉，前面的片元能进行正常渲染。
+
+```glsl
+Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
+    Properties {
+        _Color ("Color Tint", Color) = (1, 1, 1, 1)
+        _MainTex ("Main Tex", 2D) = "white" {}
+        _AlphaScale ("Alpha Scale", Range(0, 1)) = 1
+        _Specular ("Specular", Color) = (1,1,1,1)
+        _Gloss ("Gloss", Range(8, 255)) = 20
+    }
+    SubShader {
+		Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+        pass
+        {
+            ZWrite On  //默认也是开启的
+            ColorMask 0//设置不输出颜色
+        }
+        Pass {
+			Tags { "LightMode"="ForwardBase" }
+			ZWrite Off
+			Blend SrcAlpha OneMinusSrcAlpha//关闭深度写入，开启并设置渲染方式
+
+            CGPROGRAM
+            #pragma vertex vert 
+            #pragma fragment frag 
+
+            #include "Lighting.cginc"
+            
+            
+			fixed4 _Color;
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			fixed _AlphaScale;
+            fixed4 _Specular;
+            float _Gloss;
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+				float3 normal : NORMAL;
+				float4 texcoord : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+				float2 uv : TEXCOORD2;
+            };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_TARGET
+            {
+                fixed3 worldNormal = normalize(i.worldNormal);
+                fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+
+                fixed4 texColor = tex2D(_MainTex, i.uv);
+
+                fixed3 albedo = texColor.rgb * _Color.rgb;
+
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldNormal, worldLightDir));
+
+                fixed3 halfway = normalize(worldViewDir + worldLightDir);
+                fixed3 specular = _LightColor0.rgb * _Specular * pow(max(0, dot(halfway, worldNormal)), _Gloss);
+                return fixed4(ambient + diffuse + specular, texColor.a * _AlphaScale);
+            }
+            ENDCG
+        }
+    }
+    Fallback "Transparent/VertexLit"
+}
+```
+
+## 8.7 双面渲染的透明效果
+
+> 剔除指令设置：
+>
+> Cull Back | Front | Off
+>
+> Back表示背对相机的不渲染，Front表示正对相机的不渲染，Off表示都渲染
+
+### 8.7.1 透明度测试
+
+在Pass里面加入Cull off指令，即可
+
+### 8.7.2 透明度混合
+
++ 对于本身交错缠绕的，建议还是只用上面的两个Pass处理，一个负责深度写入，一个关了zwrite并进行渲染
+
++ 把原来的渲染部分分成两个，第一个Cull Front渲染背面，第二个Cull Back渲染正面。其余代码一样。
+
+****
+
+# 第九章 更复杂的光照
+
+## 9.1 Unity的渲染路径
+
++ 渲染路径：决定了光照如何应用到Shader上。
++ 一般地，需要为每个Pass指定它使用的渲染路径，如"LightMode" =  "ForwardBase"以让Unity把光源和处理后的光照信息放在数据里
+
++ 目前渲染路径有两种：前向渲染路径和延迟渲染路径
+
+![](pictures/22.png)
+
+### 9.1.1 前向渲染路径
+
+1.  原理
+
+   进行一次完整的前向渲染，需要渲染该物体的渲染图元，并计算深度缓冲和颜色缓冲的信息。如果片元通过了深度缓冲，则计算光照信息，更新到颜色缓冲区，同时更新帧缓冲。否则就去除。
+
+   如果场景有N个物体，每个物体受到M个光源的影响，则整个场景要有N*M个Pass
+
+2. Unity中的前向渲染
+
+   + 当渲染一个物体时，Unity会计算哪些光源照亮了物体，以及这些光源照亮物体的方式。
+
+   + Unity中，前向渲染有3种处理光照的方式：**逐顶点处理、逐像素处理、球谐函数**处理等。这取决于光源使用的**类型和渲染模式**
+
+     + 光源的类型：平行光/点光源/其它类型
+     + 渲染模式：Important / Auto / Not Important
+
+   + Unity会根据场景中各个光源的设置及其对物体的影响程度进行重要度排序，并决定其处理的方式。一定数目的按逐像素处理，最多4个逐顶点处理，剩下的按SH处理。
+
+     **判断规则：**
+
+     1. **平行光    逐像素**
+     2. **Not Important    逐顶点/SH**
+     3. **Important    逐像素**
+     4. **如果上面的完了，逐像素数量小于Quality Setting中的逐像素光数量，则有更多的以逐像素进行**
+     
+   + 球谐函数的特点
+
+     球谐函数光源的渲染速度_很_快。这些光源的 CPU 成本很低，并且使用 GPU 的_成本基本为零_（也就是说，ForwardBase始终会计算 SH 光照；但由于 SH 光源工作方式的原因，无论 SH 光源有多少，成本都完全相同）。
+
+     SH 光源的缺点：
+
+     - 按对象的顶点而不是按像素计算。这意味着它们不支持光照剪影和法线贴图。
+     - SH 光照的频率很低。SH 光源无法实现快速的光照过渡。它们也只影响漫射光照（频率对镜面高光而言太低）。
+     - SH 光照不是局部光照；SH 点光源或聚光灯在靠近某种表面时“看起是错误的”。
+
+     总的来说，SH 光源通常足以达到小型动态对象的光照要求。
+
+   ![](pictures/24.png)
+
+   两种pass：
+
+![](pictures/23.png)
+
+3. 内置的光照变量和函数(P184)
+
+### 9.1.2 顶点照明渲染路径
+
++ 不支持逐像素得到的效果，是前向渲染的一个子集，实际就是逐顶点着色罢了。
++ 通常在一个pass完成对物体的渲染。使用所有光源对物体的照明，光源最多8个，不足8个的为黑色
+
+### 9.1.3 延迟渲染路径
+
++ 对于前向渲染，如果有大量的实时光源，性能会急速下降。因为对于一个物体，如果有许多光源照在上面，它可能有很多重复的计算，多次计算颜色缓冲区的颜色。
++ 延迟渲染不仅使用颜色缓冲和深度缓冲，还使用G-buffer，其存储了我们关心的表面的其它信息，如normal，position，material属性等
+
+1. 原理：
+
+   主要包含2个pass.
+
+   + 第一个pass不进行光照计算，仅仅计算哪些片元是可见的，这主要使用z-buffer，当一个片元可见，就把它的相关信息存储到G-buffer中。每个物体只执行一次
+   + 第二个pass使用G-buffer的片元信息进行真正的光照计算，得到目标片元的光照信息，进行颜色计算，同时更新帧缓冲。
+
+   特点：
+
+   + 使用2个pass，且和光源数目无关，其不依赖于场景复杂度，而与屏幕空间的大小有关
+
+2. Unity中的延迟渲染
+   + 适合场景：光源数目多，每个光源都可以逐像素处理
+   + 缺点：
+     + 不能支持真正的抗锯齿功能
+     + 不能处理半透明物体。因为要用深度缓冲和深度写入直接决定哪些片元可见，这就意味着一个位置只有一个片元的数据
+     + 硬件要求
+   + 
