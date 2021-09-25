@@ -4,6 +4,7 @@
 ### 2.1 综述
 
 + 2.1.2 渲染流水线
+  
   1. 渲染流程
     * 应用阶段-----几何阶段-----光栅化阶段
     * 应用阶段:输出渲染图元。 
@@ -429,31 +430,31 @@
 
 #### 5.7.4 别除以0
 
-# 第六章 Unity中的基础光照
+## 第六章 Unity中的基础光照
 
 + 像素颜色 = 可见性 + 光照
 
-## 6.1 如何观察世界
+### 6.1 如何观察世界
 
-### 6.1.1 光源
+#### 6.1.1 光源
 
-### 6.1.2  吸收和散射
+#### 6.1.2  吸收和散射
 
 + 散射只改变光线方向，不改变光线密度和颜色，吸收改变光的密度和颜色，不改变光线方向
 + 光线在物体表面散射：
   + 一部分散射到外部，即反射。一般用specular来代表
   + 一部分继续到内部，部分经过多次散射可能出表面，即漫反射。一般用diffuse代表
 
-### 6.1.3 着色
+#### 6.1.3 着色
 
 + 着色：根据材质属性（如diffuse属性）、光源信息（如lightDirection， lightColor）用等式计算沿某个方向的出射度的过程。
 + 该等式一般称光照模型
 
-### 6.1.4 BRDF模型
+#### 6.1.4 BRDF模型
 
 + BRDF可以在给出入射光线的方向和辐照度后给出某个出射方向的光照能量分布
 
-## 6.2 标准光照模型（Blinn-Phong）
+### 6.2 标准光照模型（Blinn-Phong）
 
 + 特点：
 
@@ -488,7 +489,7 @@
       + halfway = normalize(lightDirection + viewDireciton)
       + **c<sub>specular</sub> = (c<sub>light</sub>  * m<sub>specular</sub>) * pow(max(0, normal · halfway), m<sub>gloss</sub>**)
 
-### 6.2.5 逐像素&逐顶点
+#### 6.2.5 逐像素&逐顶点
 
 + vertex为顶点着色，frag为片元着色
 
@@ -503,7 +504,7 @@
     + 插值是线性的，对于非线性的光照，如Specular，产生问题。所以一般放到frag里面处理和计算
     + 插值时是对渲染图元内部的顶点的颜色插值，导致其颜色总是暗于顶点的最高颜色值
 
-### 6.2.6 局限性
+#### 6.2.6 局限性
 
 + 菲涅尔反射问题
 + 是各向同性的，对于各向异性很难搞
@@ -514,13 +515,13 @@
 
 + 用前记得归一化
 
-# 第七章  基础纹理
+## 第七章  基础纹理
 
 + 纹理映射：又称纹理贴图，是将纹理空间中的纹理像素映射到屏幕空间中的像素的过程
 + 纹理映射坐标：也称uv坐标。一般在0到1.但是采样时的纹理坐标可能不在0到1，要看_MainTex_ST怎么设置的uv
 + **OpenGL里面纹理空间的原点在左下角，DirectX在左上角**
 
-## 7.1 单张纹理
+### 7.1 单张纹理
 
 ```glsl
 Shader "Unity Shaders Book/Chapter7/Single Texture"
@@ -605,17 +606,17 @@ Shader "Unity Shaders Book/Chapter7/Single Texture"
 }
 ```
 
-## 7.2 凹凸映射
+### 7.2 凹凸映射
 
 + 凹凸映射分成两种。一种是高度纹理，其模拟表面位移，通过算梯度得到normal的x和y，再叉乘得到normal的z。一种是法线纹理，其存储了顶点切线空间下的normal的x和y，由归一化的特性得到z值，进而得到切线空间下的normal。一般凹凸映射指后者
 
-### 7.2.2 法线纹理
+#### 7.2.2 法线纹理
 
 > 常见的映射方式就是pixel = (normal + 1)  / 2
 
-### 7.2.3 法线贴图实践代码
+#### 7.2.3 法线贴图实践代码
 
-#### 1. 切线空间
+##### 1. 切线空间
 
 ```glsl
 Shader "Untiy Shaders Book/Chapter 7/Normal Map In Tangent Space"
@@ -725,7 +726,7 @@ Shader "Untiy Shaders Book/Chapter 7/Normal Map In Tangent Space"
 }
 ```
 
-#### 2.世界空间
+##### 2.世界空间
 
 ```glsl
 Shader "Untiy Shaders Book/Chapter 7/Normal Map In World Space"
@@ -836,7 +837,7 @@ Shader "Untiy Shaders Book/Chapter 7/Normal Map In World Space"
 }
 ```
 
-## 7.3 渐变纹理
+### 7.3 渐变纹理
 
 + 用途：得到插画风格的渲染效果
 
@@ -917,7 +918,7 @@ Shader "Unity Shaders Book/Chapter 7/Ramp Texture" {
 }
 ```
 
-## 7.4 遮罩纹理
+### 7.4 遮罩纹理
 
 + 流程：
   1. 采样得到这招纹理的texel的值
@@ -925,7 +926,7 @@ Shader "Unity Shaders Book/Chapter 7/Ramp Texture" {
 + 作用：
   + 实现像素级别控制模型表面的各种属性
 
-### 7.4.1 遮罩纹理实践
+#### 7.4.1 遮罩纹理实践
 
 ```glsl
 Shader "Unity Shaders Book/Chapter 7/Mask Texture"
@@ -1022,7 +1023,7 @@ Shader "Unity Shaders Book/Chapter 7/Mask Texture"
 }
 ```
 
-# 第八章 透明效果
+## 第八章 透明效果
 
 + 渲染顺序与深度缓冲：
   + 场景渲染时，对于不同的物体有着不同的渲染先后顺序，这是使用**z-buffer**完成的。深度缓冲是用于解决可见性问题的。基本思想：在物体开启深度测试的情况下，渲染一个片元时，需要把它的深度值与已经存在于深度缓冲中的值进行比较，如果距离相机更远，则舍去；更近或者深度缓冲没值，就覆盖或者存入深度值。
@@ -1039,7 +1040,7 @@ Shader "Unity Shaders Book/Chapter 7/Mask Texture"
       + 关闭深度写入，但深度测试还是有。深度缓冲是只读不写的。
       + 可以实现真正的半透明效果
 
-## 8.1 渲染顺序的重要性
+### 8.1 渲染顺序的重要性
 
 + 问题：渲染一个半透明物体和不透明物体，且透明物体先渲染，不透明物体后渲染，在半透明物体开启深度写入的情况下，不透明物体被cull掉，而不开启深度写入时，由于半透明物体要混合颜色，则不透明的得先渲染。即使是两个不透明的物体，渲染顺序不同，混合的等式也不同，也要注意渲染顺序
 + 常用方法：
@@ -1049,7 +1050,7 @@ Shader "Unity Shaders Book/Chapter 7/Mask Texture"
   + 三个半透明物体循环重叠，无法判断哪个在前，任意一个顺序都错
     + 一般要进行网格分割，或者尽可能让模型是凸面体，将模型进行拆分
 
-## 8.2 Unity Shader的渲染顺序
+### 8.2 Unity Shader的渲染顺序
 
 ![](pictures/18.png)
 
@@ -1057,7 +1058,7 @@ Shader "Unity Shaders Book/Chapter 7/Mask Texture"
 
   ![](pictures/19.png)
 
-## 8.3 透明度测试
+### 8.3 透明度测试
 
 ```glsl
 Shader "Unity Shaders Book/Chapter8/Alpha Test"
@@ -1137,7 +1138,7 @@ Shader "Unity Shaders Book/Chapter8/Alpha Test"
 }
 ```
 
-## 8.4 透明度混合
+### 8.4 透明度混合
 
 + Blend命令
 
@@ -1151,7 +1152,7 @@ Shader "Unity Shaders Book/Chapter8/Alpha Test"
 
   见P174到P175
 
-### 8.4.1 透明度混合实例
+#### 8.4.1 透明度混合实例
 
 + 当不开启深度写入时，对于物体本身交错的情况会因为渲染片元顺序产生问题，会导致后面的部分显示在前面。解决办法是使用两个pass，第一个pass开启深度写入，但不输出颜色。第二个才关闭深度写入，由于预先已经存在了深度缓冲，对于前后两个片元，后面的那个会被剔除掉，前面的片元能进行正常渲染。
 
@@ -1241,7 +1242,7 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
 }
 ```
 
-## 8.7 双面渲染的透明效果
+### 8.7 双面渲染的透明效果
 
 > 剔除指令设置：
 >
@@ -1249,11 +1250,11 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
 >
 > Back表示背对相机的不渲染，Front表示正对相机的不渲染，Off表示都渲染
 
-### 8.7.1 透明度测试
+#### 8.7.1 透明度测试
 
 在Pass里面加入Cull off指令，即可
 
-### 8.7.2 透明度混合
+#### 8.7.2 透明度混合
 
 + 对于本身交错缠绕的，建议还是只用上面的两个Pass处理，一个负责深度写入，一个关了zwrite并进行渲染
 
@@ -1261,9 +1262,9 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
 
 ****
 
-# 第九章 更复杂的光照
+## 第九章 更复杂的光照
 
-## 9.1 Unity的渲染路径
+### 9.1 Unity的渲染路径
 
 + 渲染路径：决定了光照如何应用到Shader上。
 + 一般地，需要为每个Pass指定它使用的渲染路径，如"LightMode" =  "ForwardBase"以让Unity把光源和处理后的光照信息放在数据里
@@ -1272,7 +1273,7 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
 
 ![](pictures/22.png)
 
-### 9.1.1 前向渲染路径
+#### 9.1.1 前向渲染路径
 
 1.  原理
 
@@ -1318,12 +1319,12 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
 
 3. 内置的光照变量和函数(P184)
 
-### 9.1.2 顶点照明渲染路径
+#### 9.1.2 顶点照明渲染路径
 
 + 不支持逐像素得到的效果，是前向渲染的一个子集，实际就是逐顶点着色罢了。
 + 通常在一个pass完成对物体的渲染。使用所有光源对物体的照明，光源最多8个，不足8个的为黑色
 
-### 9.1.3 延迟渲染路径
+#### 9.1.3 延迟渲染路径
 
 + 对于前向渲染，如果有大量的实时光源，性能会急速下降。因为对于一个物体，如果有许多光源照在上面，它可能有很多重复的计算，多次计算颜色缓冲区的颜色。
 + 延迟渲染不仅使用颜色缓冲和深度缓冲，还使用G-buffer，其存储了我们关心的表面的其它信息，如normal，position，material属性等
@@ -1345,4 +1346,189 @@ Shader "Unity Shaders Book/Chapter 8/Alpha Blend" {
      + 不能支持真正的抗锯齿功能
      + 不能处理半透明物体。因为要用深度缓冲和深度写入直接决定哪些片元可见，这就意味着一个位置只有一个片元的数据
      + 硬件要求
-   + 
+   
+   + 基本流程：
+     + 第一个pass渲染G缓冲，会将物体的漫反射颜色、高光反射、平滑度、法线、自发光和深度等信息渲染到G缓冲，这个仅执行一次
+     + 第二个Pass用于计算真正的光照，通过上面的数据计算颜色，存到帧缓冲
+
+### 9.2  Unity的光源类型
+
+光源的基本属性：位置、方向、颜色、强度、衰减
+
+#### 9.2.1 光源类型
+
++ 平行光
+  + 特点：
+    1. 照亮范围无限
+    2. 几何属性只有方向
+    3. 强度不衰减。因为位置不固定
++ 点光源
++ 聚光灯
+
+#### 9.2.2 在前向渲染中处理不同光源
+
+```glsl
+Shader "Unity Shaders Book/Chapter 9/MyForward Rendering" {
+	Properties {
+		_Diffuse ("Diffuse", Color) = (1, 1, 1, 1)
+		_Specular ("Specular", Color) = (1, 1, 1, 1)
+		_Gloss ("Gloss", Range(8.0, 256)) = 20
+	}
+	SubShader {
+		Tags { "RenderType"="Opaque" }
+		
+        //第一个pass处理环境光，平行光.对于base来说，它的fragment处理的一定是平行光
+		Pass {
+			Tags { "LightMode"="ForwardBase" }
+		
+			CGPROGRAM
+			
+            //这条必须有，可以保证使用光照衰减的时候能正确赋值
+			#pragma multi_compile_fwdbase	
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "Lighting.cginc"
+			
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+			
+			struct a2v {
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+			
+			struct v2f {
+				float4 pos : SV_POSITION;
+				float3 worldNormal : TEXCOORD0;
+				float3 worldPos : TEXCOORD1;
+			};
+			
+			v2f vert(a2v v) {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				
+				return o;
+			}
+			
+			fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+				
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+				
+			 	fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+
+			 	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+			 	fixed3 halfDir = normalize(worldLightDir + viewDir);
+			 	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+
+				fixed atten = 1.0;
+				
+				return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+	
+		Pass {
+			//定义为add
+			Tags { "LightMode"="ForwardAdd" }
+            //设置混合模式
+			Blend One One
+		
+			CGPROGRAM
+			
+			#pragma multi_compile_fwdadd
+			
+			#pragma vertex vert
+			#pragma fragment frag
+			
+			#include "Lighting.cginc"
+			#include "AutoLight.cginc"//必须有AutoLight
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			float _Gloss;
+
+            struct a2v
+            {
+                float3 vertex : POSITION;
+                fixed4 normal : NORMAL;
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                fixed3 worldNormal : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+            };  
+
+            v2f vert(a2v v)
+            {
+				v2f o;
+				o.pos = UnityObjectToClipPos(v.vertex);
+				
+				o.worldNormal = UnityObjectToWorldNormal(v.normal);
+				
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				
+				return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target {
+				fixed3 worldNormal = normalize(i.worldNormal);
+				#ifdef USING_DIRECTIONAL_LIGHT
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+				#else
+					fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz - i.worldPos.xyz);
+				#endif
+				
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, dot(worldNormal, worldLightDir));
+				
+				fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+				fixed3 halfDir = normalize(worldLightDir + viewDir);
+				fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+				
+                //定义不同光源类型的衰减系数
+				#ifdef USING_DIRECTIONAL_LIGHT
+					fixed atten = 1.0;
+				#else
+                	//使用查找表纹理得到衰减
+					#if defined (POINT)
+				        float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
+				        fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+				    #elif defined (SPOT)
+				        float4 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1));
+				        fixed atten = (lightCoord.z > 0) * tex2D(_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w * tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+				    #else
+				        fixed atten = 1.0;
+				    #endif
+				#endif
+
+				return fixed4((diffuse + specular) * atten, 1.0);
+			}
+			
+			ENDCG
+		}
+    }
+    Fallback "Specular"
+}
+```
+
++ 一般地，如果没改Pixel Light Count，则一个物体最多接收4个逐像素光照，包括平行光在内。一般Important接收逐像素
+
+### 9.3 Unity的光照衰减
+
+#### 9.3.1 用于光照衰减的纹理
+
++ 一般地，使用_LightTexture0采样得到衰减值
+
+### 9.4 Unity的阴影
+
++ 阴影的产生
