@@ -140,7 +140,7 @@ vector<int> d(nums, nums + 5);
 （19）a.swap(b); //b为向量，将a中的元素和b中的元素进行整体性交换
 （20）a==b; //b为向量，向量的比较操作还有!=,>=,<=,>,<
  (21) emplace(a.begin() + 1, 3);//在第二个地方插入3;
- (22) emplace_front(int),emplace_back(int)
+ (22) emplace_back(int)//注意没有emplace_front
  (23) a.at(0)//返回索引为0处的值
 3.常用algorithm
 （1）sort(a.begin(),a.end()); //对a中的从a.begin()（包括它）到a.end()（不包括它）的元素进行从小到大排列
