@@ -1159,3 +1159,1011 @@ inline void
 sort(_RandomAccessIterator __first, _RandomAccessIterator __last,_Compare __comp){}
 ```
 
+## 30. 算法源代码剖析
+
++ STL标准库的算法一般和C函数不同，其具有特定的形式
+
+  ```c++
+  template<typename Iterator>
+  std::Algorithm(Iterator iter1, Iterator iter2)
+  {
+      ...
+  }
+  ```
+
+  
+
+### 30.1 accumulate
+
++ 主要功能就是累计
++ 这个函数的意义说明了STL中往往为同一个接口设计多个不同的算法，用于拓展相应的功能
++ STL往往会有一个提供函数或者仿函数的参数版本，基本的意义，比如用于比较函数内的，用于对迭代器范围内的元素执行某个操作这样的
+
+```c++
+1.接口1，就是把[first, last)的元素加到init上，返回init的结果
+template<typename _InputIterator,typename _Tp>
+inline _Tp accumulate(_InputIterator __first, _InputIterator __last, _Tp __init)
+{
+      for (; __first != __last; ++__first)
+	__init = __init + *__first;
+      return __init;
+}
+
+2.接口2，将[first, last)中的元素和init作__binary_op操作，并返回init，__binary_op可以是一个functor，可以是一个函数
+template<typename _InputIterator, typename _Tp, typename _BinaryOperation>
+inline _Tp accumulate(_InputIterator __first, _InputIterator __last, _Tp __init,_BinaryOperation __binary_op)
+{
+      for (; __first != __last; ++__first)
+	__init = __binary_op(__init, *__first);
+      return __init;
+}
+```
+
+### 30.2 for_each
+
+```c++
+1. 功能就是对[first, last)的元素都调用函数__f
+template<typename _InputIterator,typename _Function>
+_Function for_each(_InputIterator __first, _InputIterator __last, _Function __f)
+{
+    for (; __first != __last; ++__first)
+		__f(*__first);
+      return __f;
+}
+```
+
+### 30.3 replace,replace_if,replace_copy
+
++ 这个系列说明了STL的部分算法的统一命名方式
+
++ 类似的如count和count_if
+
+```c++
+1.replace：对[first, last)中的元素进行判断，如果值为old value，则将其替换成new value
+template<typename _ForwardIterator, typename _Tp>
+void replace(_ForwardIterator __first, _ForwardIterator __last,const _Tp& __old_value, const _Tp& __new_value)
+{
+	for (; __first != __last; ++__first)
+	if (*__first == __old_value)
+		*__first = __new_value;
+}
+
+2.replace_if:和上面类似，只是将old value的位置改成了一个函数或者仿函数，作为判断条件；条件成立，则将其换成new value
+template<typename _FIterator, typename _Predicate, typename _Tp>
+inline void replace_if(_FIterator __begin, _FIterator __end, _Predicate __pred,const _Tp& __new_value, __gnu_parallel::sequential_tag)
+{ 
+	for (; __first != __last; ++__first)
+	if (__pred(*__first))
+		*__first = __new_value; 
+}
+
+3.replace_copy：是一个复制用的算法，对于给定[first, last)的元素，它将元素值和old value比较，如果相等，则在复制位置用new value替代，否则照常copy，它实际是调用了replace_copy_if，也就是上面的if版本，只是仿函数传入了判断相等的函数
+template<typename _InputIterator, typename _OutputIterator, typename _Tp>
+inline _OutputIterator replace_copy(_InputIterator __first, _InputIterator __last,_OutputIterator __result, const _Tp& __old_value, const _Tp& __new_value)
+{
+	for (; __first != __last; ++__first, (void)++__result)
+		if (*__first == __old_value))
+			*__result = __new_value;
+		else
+			*__result = *__first;
+	return __result;
+}
+```
+
+### 30.4 count, count_if
+
++ 函数的功能就是统计容器中某个元素的个数，或者是符合条件的元素的个数
++ 这个例子说明有些全局的算法在某些容器内也有自己的定义版本
++ 不自己带count的，就是array，vector，list，forward_list,deque等非关联式容器；而像set，map，unordered版，multi版，unordered_multi版等关联式容器，就有自己的定义
+
+### 30.5 find, find_if
+
++ 查找函数，像非关联式容器，就没有自己的定义，而关联式容器，则有自己的方法。
++ 它的查找方式就是从头到尾一个个找，毕竟不确定容器是否有序
+
+### 30.6 sort
+
++ 关联式容器就没有这个sort，当然，其它的一些非关联式容器也没有，如vector，array，deque；只有list，forward_list有sort函数，毕竟它们无法随机访问，而sort要求使用随机访问迭代器
++ sort函数有一个默认参数，就是所谓<号。可以传入function，也可以传入仿函数
+
+### 30.7 binary_search
+
++ 用前默认容器已经排序了
++ 实际上是使用lower_bound，即查找第一个大于等于目标的位置，即插入一个元素进去的最低点；upper_bound则是第一个大于它的，即插入一个元素进去的最低点。
+
+## 31. 仿函数和函数对象
+
+### 31.1 Functor仿函数/函数对象
+
++ 服务于算法的一个用类包装的函数。
++ 主要分成三类
+  + 算数类
+    + 加减乘除这种
+  + 逻辑运算类
+    + 与非或这种
+  + 相对关系类
+    + 如比较大小的，greater,less,equal
++ 此外，还有一些非标准的，如\_Identity，\_Select1st，\_Select2nd等
+
+#### 31.1.1 Functor的继承
+
++ functor有两个基本的基类unary_function和binary_function，表示一元函数和二元函数，实际就是一个参数，两个参数的区别
++ 实际上，由于没有data，大小就是1，当然，如果有人继承它，实例化的作为基类的自己大小为0
++ 这种手法也很重要，即在基类中定义所谓typedef，来作为一些类的特性，而继承它的类则具有这样的特性。
+
+```c++
+template<typename _Arg, typename _Result>
+struct unary_function
+{
+	/// @c argument_type is the type of the argument
+	typedef _Arg 	argument_type;   
+	/// @c result_type is the return type
+	typedef _Result 	result_type;  
+};
+
+template<typename _Arg1, typename _Arg2, typename _Result>
+struct binary_function
+{
+	/// @c first_argument_type is the type of the first argument
+	typedef _Arg1 	first_argument_type; 
+	/// @c second_argument_type is the type of the second argument
+	typedef _Arg2 	second_argument_type;
+	/// @c result_type is the return type
+	typedef _Result 	result_type;
+};
+```
+
++ 对于自定义的functor，如果要融入标准库，则可以尝试继承上面这两个之一，这样，也就完成了一个适配，当适配器adaptor来询问时，就会得到正确的反应。
+
+```c++
+1. less的基本代码
+template<typename _Tp>
+struct less : public binary_function<_Tp, _Tp, bool>
+{
+	_GLIBCXX14_CONSTEXPR
+	bool operator()(const _Tp& __x, const _Tp& __y) const
+	{
+		return __x < __y; 
+	}
+};
+
+2.某个adaptor的询问机制
+//这里可以看到，使用binder2nd的时候，必须要求定义了first_argument_type, second_argument_type，还有result_type。也就是说，要求必须是binary_function及其子类functor
+template<typename _Operation>
+class binder2nd : public unary_function<typename _Operation::first_argument_type, typename _Operation::result_type>
+    // 这里将一个二元的binary_function类型的_Operation functor转为了一个一元的functor
+{
+	protected:
+		_Operation op;//做法很高明，首先是定义这个原来的functor，毕竟要调用它的方法
+		typename _Operation::second_argument_type value;//接着直接定义出它的第二个参数的一个变量
+	public:
+		binder2nd(const _Operation& __x, const typename _Operation::second_argument_type& __y) : op(__x), value(__y) { }//在进行bind的时候，传入一个functor，以及它的第二个参数，直接用成员初始化列表赋值
+		typename _Operation::result_type operator()(const typename _Operation::first_argument_type& __x) const
+		{
+			return op(__x, value); 
+		}//而在调用时，只传入第一元的那个参数，固定了第二元的参数，并调用存放着的functor
+		typename _Operation::result_type operator()(typename _Operation::first_argument_type& __x) const
+		{
+			return op(__x, value);
+		}//还提供了一个const的版本
+} _GLIBCXX_DEPRECATED;
+```
+
+## 32. Adaptor适配器
+
++ 承接上文，bind2nd其实就是一个适配器，相当于改了改接口
++ adaptor的关键在于，它一般会存在一个被adpated的原接口，用于功能的实现，而实际上用户使用的时候，则是被适配过后的接口。也即所谓<font color = "red">适配器模式</font>。当然，要包含原接口的时候，还是基于多用组合，少用继承的原则来进行。
+
++ adaptor当然也有可能作为functor传给algorithm，既然algorithm可能也要询问，所以，一般地，adaptor也有类似functor一样的继承机制，比如，继承一个unary_function,binary_function之类的
+
+![](pictures/21.png)
+
++ 常见的适配器，比如stack使用deque，queue也使用deque。例如，stack的pop实际是使用了deque的pop_back();
+
+## 33. bind2nd
+
+```c++
+例子：
+count_if(v1.begin(), v1.end(), not1(bind2nd(less<int>(), 40)));
+
+/*
+上面这个bind2nd并不是一个binder2nd类，因为创建这样一个类必须指定好模板参数，而函数调用则可以推断，创建类的工作留给用户做就相对麻烦，于是使用bind2nd这样一个接口，在bind2nd中自己创建binder2nd，用户只要传入这个less<int>()就行，而不需要使用binder2nd<less<int>>(less<int>(), 40)
+*/
+    
+template<typename _Operation, typename _Tp>
+inline binder2nd<_Operation> bind2nd(const _Operation& __fn, const _Tp& __x)//用户使用的适配的版本
+{
+	typedef typename _Operation::second_argument_type _Arg2_type;//这里实际就是一个询问环节
+    //注意，这里对模板参数的里面的某个定义进行使用时必须要使用typename，毕竟这样才能提示说传入的模板参数具有second_argument_type这个定义
+	return binder2nd<_Operation>(__fn, _Arg2_type(__x));//会强制将x，也即第二参数转换，不能转，就可能出错
+}
+```
+
++ functors可被适配的条件
+  + functors应当继承binary_function或者unary_function这两个类，以备询问
+
++ 在新版的适配器部分中，有许多修改和替换
+
+![](pictures/22.png)
+
+## 34. not1
+
++ 在前面的例子中，count_if传入的操作是not1(bind2nd(less\<int>(), 40))
+
+```c++
+template<typename _Predicate>
+_GLIBCXX14_CONSTEXPR
+inline unary_negate<_Predicate>
+not1(const _Predicate& __pred)
+{
+    return unary_negate<_Predicate>(__pred);//返回一个这样的unary_negate对象
+    //这个对象也是一个functor普遍继承的模板
+    //它自己继承自unary_function这个基类
+}
+
+template<typename _Predicate>
+class unary_negate : public unary_function<typename _Predicate::argument_type, bool>
+{
+	protected:
+		_Predicate _M_pred;
+	public:
+		_GLIBCXX14_CONSTEXPR
+		explicit unary_negate(const _Predicate& __x) : _M_pred(__x) { }
+		 _GLIBCXX14_CONSTEXPR
+		bool operator()(const typename _Predicate::argument_type& __x) const
+		{
+             return !_M_pred(__x);
+         }
+};
+```
+
+## 35. bind
+
++ 主要用于取代bind1st，bind2nd
++ 功能
+  + 绑定函数：functions
+  + 绑定函数对象：function objects
+  + 绑定成员函数：member functions, _1(一个占位符，由于对象隐含this指针，所以这个必须要有，是用于指定类的)
+  + 绑定类的数据成员：data members, _1
++ 返回一个函数对象
+
+![](pictures/23.png)
+
+## 36. reverse iterator
+
++ 这里涉及到了迭代器的适配器
+
+```c++
+template<typename _Tp>
+inline _GLIBCXX17_CONSTEXPR reverse_iterator<const _Tp*> rbegin(initializer_list<_Tp> __il)
+{
+    return reverse_iterator<const _Tp*> (__il.end());//以某个特别的例子为例，这个说明返回了一个对象，rbegin就是取的end()
+}
+
+template<typename _Iterator>
+class reverse_iterator : public iterator<typename iterator_traits<_Iterator>::iterator_category,
+typename iterator_traits<_Iterator>::value_type,
+typename iterator_traits<_Iterator>::difference_type,
+typename iterator_traits<_Iterator>::pointer,
+typename iterator_traits<_Iterator>::reference>
+{
+    protected:
+    _Iterator current;
+
+    typedef iterator_traits<_Iterator>		__traits_type;
+
+    public:
+    typedef _Iterator					iterator_type;
+    typedef typename __traits_type::difference_type	difference_type;
+    typedef typename __traits_type::pointer		pointer;
+    typedef typename __traits_type::reference		reference;
+
+    /**
+       *  The default constructor value-initializes member @p current.
+       *  If it is a pointer, that means it is zero-initialized.
+      */
+    // _GLIBCXX_RESOLVE_LIB_DEFECTS
+    // 235 No specification of default ctor for reverse_iterator
+    _GLIBCXX17_CONSTEXPR
+        reverse_iterator() : current() { }
+
+    /**
+       *  This %iterator will move in the opposite direction that @p x does.
+      */
+    explicit _GLIBCXX17_CONSTEXPR
+        reverse_iterator(iterator_type __x) : current(__x) { }
+
+    /**
+       *  The copy constructor is normal.
+      */
+    _GLIBCXX17_CONSTEXPR
+        reverse_iterator(const reverse_iterator& __x)
+        : current(__x.current) { }
+
+    /**
+       *  A %reverse_iterator across other types can be copied if the
+       *  underlying %iterator can be converted to the type of @c current.
+      */
+    template<typename _Iter>
+    _GLIBCXX17_CONSTEXPR
+    reverse_iterator(const reverse_iterator<_Iter>& __x)
+    : current(__x.base()) { }
+
+    /**
+       *  @return  @c current, the %iterator used for underlying work.
+      */
+    _GLIBCXX17_CONSTEXPR iterator_type
+        base() const
+    { return current; }
+
+    /**
+       *  @return  A reference to the value at @c --current
+       *
+       *  This requires that @c --current is dereferenceable.
+       *
+       *  @warning This implementation requires that for an iterator of the
+       *           underlying iterator type, @c x, a reference obtained by
+       *           @c *x remains valid after @c x has been modified or
+       *           destroyed. This is a bug: http://gcc.gnu.org/PR51823
+      */
+    _GLIBCXX17_CONSTEXPR reference
+        operator*() const
+    {
+        _Iterator __tmp = current;
+        return *--__tmp;
+    }
+
+    /**
+       *  @return  A pointer to the value at @c --current
+       *
+       *  This requires that @c --current is dereferenceable.
+      */
+    _GLIBCXX17_CONSTEXPR pointer
+        operator->() const
+    { return &(operator*()); }
+
+    /**
+       *  @return  @c *this
+       *
+       *  Decrements the underlying iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator&
+        operator++()
+    {
+        --current;
+        return *this;
+    }
+
+    /**
+       *  @return  The original value of @c *this
+       *
+       *  Decrements the underlying iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator
+        operator++(int)
+    {
+        reverse_iterator __tmp = *this;
+        --current;
+        return __tmp;
+    }
+
+    /**
+       *  @return  @c *this
+       *
+       *  Increments the underlying iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator&
+        operator--()
+    {
+        ++current;
+        return *this;
+    }
+
+    /**
+       *  @return  A reverse_iterator with the previous value of @c *this
+       *
+       *  Increments the underlying iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator
+        operator--(int)
+    {
+        reverse_iterator __tmp = *this;
+        ++current;
+        return __tmp;
+    }
+
+    /**
+       *  @return  A reverse_iterator that refers to @c current - @a __n
+       *
+       *  The underlying iterator must be a Random Access Iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator
+        operator+(difference_type __n) const
+    { return reverse_iterator(current - __n); }
+
+    /**
+       *  @return  *this
+       *
+       *  Moves the underlying iterator backwards @a __n steps.
+       *  The underlying iterator must be a Random Access Iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator&
+        operator+=(difference_type __n)
+    {
+        current -= __n;
+        return *this;
+    }
+
+    /**
+       *  @return  A reverse_iterator that refers to @c current - @a __n
+       *
+       *  The underlying iterator must be a Random Access Iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator
+        operator-(difference_type __n) const
+    { return reverse_iterator(current + __n); }
+
+    /**
+       *  @return  *this
+       *
+       *  Moves the underlying iterator forwards @a __n steps.
+       *  The underlying iterator must be a Random Access Iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reverse_iterator&
+        operator-=(difference_type __n)
+    {
+        current += __n;
+        return *this;
+    }
+
+    /**
+       *  @return  The value at @c current - @a __n - 1
+       *
+       *  The underlying iterator must be a Random Access Iterator.
+      */
+    _GLIBCXX17_CONSTEXPR reference
+        operator[](difference_type __n) const
+    { return *(*this + __n); }
+};
+
+```
+
+## 37. inserter
+
+```c++
+list<int> foo, bar;
+for (int i = 1; i <= 5; ++i)
+{
+    foo.push_back(i);
+    bar.push_back(i * 10);
+}
+list<int>::iterator it = foo.begin();
+advance(it, 3);
+
+copy(bar.begin(), bar.end(), inserter(foo, it))
+```
+
++ 效果：
+
+![](pictures/24.png)
+
++ 实现原理和技巧
+
+```c++
+//copy的底层
+static _OI __copy_m(_II __first, _II __last, _OI __result)
+{
+    for (; __first != __last; ++__result, (void)++__first)
+        *__result = *__first;
+    return __result;
+}
+
+/*用户使用的inserter接口*/
+template<typename _Container, typename _Iterator>
+inline insert_iterator<_Container>
+inserter(_Container& __x, _Iterator __i)
+{
+    return insert_iterator<_Container>(__x,                                  typename _Container::iterator(__i));
+}//这里返回一个inert_iterator对象
+
+template<typename _Container>
+class insert_iterator : public iterator<output_iterator_tag, void, void, void, void>
+{
+    protected:
+    _Container* container;				//原容器的指针
+    typename _Container::iterator iter; //原容器的那个迭代器
+
+    public:
+    typedef _Container          container_type;
+
+    // 构造函数，主要就是初始化两个成员变量
+    insert_iterator(_Container& __x, typename _Container::iterator __i)
+        : container(std::__addressof(__x)), iter(__i) {}
+
+    #if __cplusplus < 201103L
+    insert_iterator&
+        operator=(typename ::const_reference __value)
+    {
+        iter = container->insert(iter, __value);
+        ++iter;
+        return *this;			//就是在iter前插入value，返回的iter还是之前这个iter
+    }
+    #else
+    insert_iterator&
+        operator=(const typename _Container::value_type& __value)
+    {
+        iter = container->insert(iter, __value);
+        ++iter;
+        return *this;
+    }
+
+    insert_iterator&
+        operator=(typename _Container::value_type&& __value)
+    {
+        iter = container->insert(iter, std::move(__value));
+        ++iter;
+        return *this;
+    }
+    #endif
+
+    /// Simply returns *this.
+    insert_iterator&
+        operator*()
+    { return *this; }//一般的迭代器返回容器存储的值的引用类型；而这里则直接返回迭代器本身的引用，这样，在*result = *first的时候，就可以使用到这个insert_iterator::operator=(typename _Container::value_type&& __value)了
+
+    /// Simply returns *this.  (This %iterator does not @a move.)
+    insert_iterator&
+        operator++()
+    { return *this; }
+
+    /// Simply returns *this.  (This %iterator does not @a move.)
+    insert_iterator&
+        operator++(int)
+    { return *this; }
+};
+```
+
++ 由此，可以发现，在copy的固定的一个统一的接口\*\__result = *__first上，藉由不同运算符重载实现，实现了不同的动作，从这个意义上讲，在C++中，既可以把函数作为接口，也可以把能够重载的运算符作为接口。
+
+## 38. ostream_iterator&&istream_iterator
+
+```c++
+//例子：
+std::copy(myVector.begin(), myVector.end(), ostream_iterator<int>(std::out, ","));
+```
+
++ 基本思想和上面的inserter一样，也是运算符重载的一个灵活运用
+
++ 不同点在于，这个没有使用一个函数接口，而是直接使用以往作为实现的一个类，故在使用时，并不能像bind那样的函数可以实现自动推断，这里创建一个functor就得自己指定模板参数
++ 这相当于一个ostream的适配器
+
+```c++
+template<typename _Tp, typename _CharT = char,
+typename _Traits = char_traits<_CharT> >
+class ostream_iterator : public iterator<output_iterator_tag, void, void, void, void>
+{
+public:
+    typedef _CharT                         char_type;
+    typedef _Traits                        traits_type;
+    typedef basic_ostream<_CharT, _Traits> ostream_type;
+private:
+    ostream_type*	_M_stream;//注意是个指针
+    const _CharT*	_M_string;//这是一个分隔符，准确命名为delim
+
+public:
+    ostream_iterator(ostream_type& __s) : _M_stream(std::__addressof(__s)), _M_string(0) {}
+    ostream_iterator(ostream_type& __s, const _CharT* __c) : _M_stream(&__s), _M_string(__c)  { }
+	ostream_iterator(const ostream_iterator& __obj) : _M_stream(__obj._M_stream), _M_string(__obj._M_string)  { }
+    ostream_iterator& operator=(const _Tp& __value)//=的重载作用就是用<<向stream输入数据和分隔符
+    {
+        __glibcxx_requires_cond(_M_stream != 0,
+                                _M_message(__gnu_debug::__msg_output_ostream)
+                                ._M_iterator(*this));
+        *_M_stream << __value;
+        if (_M_string) *_M_stream << _M_string;
+        return *this;
+    }
+
+    ostream_iterator&
+        operator*()
+    { return *this; }//和上面的inserter一样
+
+    ostream_iterator&
+        operator++()
+    { return *this; }
+
+    ostream_iterator&
+        operator++(int)
+    { return *this; }//不能++和--
+};
+```
+
+## 38. istream_iterator
+
++ 两个例子
+
+```c++
+//1. 
+istream_iterator<int> eos;
+istream_iterator<int> iit(cin);
+if (iit != eos) value = *iit;
+//2.
+istream_iterator<int> iit(cin), eos;
+copy(iit, eos, inserter(c, c.begin()));
+```
+
+
+
+```c++
+template<typename _Tp, typename _CharT = char,
+typename _Traits = char_traits<_CharT>, typename _Dist = ptrdiff_t>
+class istream_iterator : public iterator<input_iterator_tag, _Tp, _Dist, const _Tp*, const _Tp&>
+{
+public:
+    typedef _CharT                         char_type;
+    typedef _Traits                        traits_type;
+    typedef basic_istream<_CharT, _Traits> istream_type;
+
+private:
+    istream_type*	_M_stream;
+    _Tp		_M_value;
+    bool		_M_ok;
+
+public:
+    ///  Construct end of input stream iterator.
+    // 无参数的构造函实际构造了一个istream_iter的统一结尾end，因为可以根据_M_ok是否false来判断是否end
+    _GLIBCXX_CONSTEXPR istream_iterator() : _M_stream(0), _M_value(), _M_ok(false) {}
+    ///  Construct start of input stream iterator.
+    istream_iterator(istream_type& __s) : _M_stream(std::__addressof(__s))
+    { 
+        _M_read(); //通过赋值istream_type的构造函数一进来就读取数据到_M_vavlue;
+    }
+    /// copy Construct
+    istream_iterator(const istream_iterator& __obj) : _M_stream(__obj._M_stream), _M_value(__obj._M_value),_M_ok(__obj._M_ok){ }
+
+    // *iter就是取value
+    const _Tp& operator*() const
+    {
+        __glibcxx_requires_cond(_M_ok,
+                                _M_message(__gnu_debug::__msg_deref_istream)
+                                ._M_iterator(*this));
+        return _M_value;
+    }
+
+    const _Tp* operator->() const { return std::__addressof((operator*())); }
+
+    // ++iter就是读下一个字符到value上
+    istream_iterator& operator++()
+    {
+        __glibcxx_requires_cond(_M_ok,
+                                _M_message(__gnu_debug::__msg_inc_istream)
+                                ._M_iterator(*this));
+        _M_read();
+        return *this;
+    }
+
+    // iter++则是取了value再读下一个到value
+    istream_iterator operator++(int)
+    {
+        __glibcxx_requires_cond(_M_ok,
+                                _M_message(__gnu_debug::__msg_inc_istream)
+                                ._M_iterator(*this));
+        istream_iterator __tmp = *this;
+        _M_read();
+        return __tmp;
+    }
+
+    // 相不相等就看是否ok就行，这个会被定义为非成员函数的operator==和operator!=调用
+    bool _M_equal(const istream_iterator& __x) const
+    { return (_M_ok == __x._M_ok) && (!_M_ok || _M_stream == __x._M_stream); }
+
+private:
+    void _M_read()
+    {
+        _M_ok = (_M_stream && *_M_stream) ? true : false;//读取首先判断_M_stream是否为空
+        if (_M_ok)
+        {
+            *_M_stream >> _M_value;						//不为空则读取数据到_M_value;
+            _M_ok = *_M_stream ? true : false;			//然后继续判断ok与否，因为_M_stream.operator>>()的返回值一般为自己的引用，仅当eof时返回0，故一旦发现*_M_stream为0了，就说明已经到了end
+        }
+    }
+};
+```
+
+## 40. 一个万用的hash函数
+
++ 一些基本的"原子"数据，都是有hash的，它们的hash就是自己；一些复杂的，如string，也是有hash的，一般有一个比较复杂的hash计算
++ 如何为被视作处理单元的自定义类来定义合适的hash函数是一个重要问题
+
+### 40.1 基本框架
+
+```c++
+#include <functional>
+class Customer{
+	...
+};
+// 1.使用仿函数作为其hash函数
+class CustomerHash{
+public:
+    size_t operator()(const Customer& c) const
+    {
+        return ...
+	}
+}
+unordered_set<Customer, CustomerHash> customerSet;
+
+// 2.使用一个定义的外部函数
+size_t customer_hash_func(const Customer& c)
+{
+    return ...
+}
+unordered_set<Customer, size_t(*)(const Customer&)> customerSet(20, customer_hash_func);
+```
+
+### 40.2 万用hash
+
++ 一个首先想到的办法是将每个成员（一般是所谓原子成员）的hash全部相加作为类的hash；当然，很可能导致碰撞的问题。**不应该使用**
++ 下面有一个万能hash函数，它的思想来自tr1；这里涉及到可变模板参数的使用，函数根据具体化程度的不同跳入不同的接口去处理。
+
+```c++
+// 1.可以传入任意个参数的一个接口，这玩意一般就是调用的入口，也是具体化程度最低的
+template<typename... Types>
+inline size_t hash_val(const Types& ... args)
+{
+    size_t seed = 0;
+    hash_val(seed, args...);//接着调用2
+    return seed;
+}
+
+// 2.这里是一个包含三个部分参数的接口，具体化程度高，用于递归，一个个处理val，让args逐步减少
+template<typename T, typename ... Types>
+inline void hash_val(size_t& seed, const T& val, const Types& ... args)
+{
+    hash_combine(seed, val);//每次都处理一个val，将其结果与已有的seed作一个操作
+    hash_val(seed, args...);
+}
+
+// 3.最后是落到这个函数，说明只有一个val了，会由2跳到这里，最后完成hash
+template<typename T>
+inline void hash_val(size_t& seed, const T& val)
+{
+    hash_combine(seed, val);
+}
+
+template<typename T>
+inline void hash_combine(size_t& seed, const T& val)
+{
+    seed ^= hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+```
+
++ 上面这个其实还是有问题的，因为当初次就要调用hash_val(size_t, T, Types&...)时，会进入2，而不是1
+
+### 40.3 基于STL的hash的框架
+
++ 由unordered_map定义出发
+
+```c++
+template<typename _Key, typename _Tp,
+typename _Hash = std::hash<_Key>,
+//这里默认是hash<key>
+typename _Pred = std::equal_to<_Key>,
+typename _Alloc = std::allocator<std::pair<const _Key, _Tp> >>
+class unordered_map : public _GLIBCXX_STD_BASE, public _Unordered_profile<unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>,true>
+{...}
+```
+
++ 这样，我们可以自己为自定义的类定义出hash\<myConcreteClass>
+
+```c++
+// 该hash模板也是相当简单，所以只要自己特化出仿函数版本就行
+template<typename _Tp>
+struct hash : __hash_enum<_Tp>
+{ };
+
+template<>
+struct hash<Customer>
+{
+    size_t operator()(const Customer& s) const noexcept
+    {
+        return ...;
+    }
+}
+
+/// 下面是STL中的一个为float的特化版本
+/// Specialization for float.
+template<>
+struct hash<float> : public __hash_base<size_t, float>
+{
+    size_t operator()(float __val) const noexcept
+    {
+        // 0 and -0 both hash to zero.
+        return __val != 0.0f ? std::_Hash_impl::hash(__val) : 0;
+    }
+};
+
+/// 下面是bits/basic_string.h下对string的特化版本
+template<>
+struct hash<string> : public __hash_base<size_t, string>
+{
+    size_t operator()(const string& __s) const noexcept
+    { return std::_Hash_impl::hash(__s.data(), __s.length()); }
+};
+```
+
+## 41. tuple及其用例
+
++ tuple即所谓元组，就是一些任意类型或者东西组合在一起
+
+```c++
+// 1. 创建
+tuple<string, int, int> t;
+auto t1 = make_tuple(2, 4, "awef");
+
+// 2. 获取某个元素的引用
+get<0>(t1);
+
+// 3. tuple的比较
+t < t1
+    
+// 4. tuple与元素绑定
+int i, int k, string val;
+tie(val, i, k) = t;
+```
+
+### 41.1 tuple存储元素的实现
+
++ 和上面那个万用hash类似，也是使用可变模板参数的技巧来递归，不过这里是使用递归地继承从而实现tuple，这是一个最大的亮点。
++ 第二点则是在实现上相当细粒度地遵循**单一职责原则和最小知道原则**，tuple桥接一个\_Tuple_impl来实现这个递归继承的功能，而\_Tuple_impl则继承一个\_Head_base，实现对这样一个单一数据的一些操作
++ 第三点是充分利用了函数模板的自动推测机制来弥补模板类创建时的无法自动推断缺陷
+
+```c++
+// tuple类
+/*
+tuple类实际继承一个_Tuple_impl类，作为桥接和实现的一个类。
+*/
+// 基本的类声明
+template<typename... _Elements>
+class tuple;
+// 1. 无参版本，作为一个具体化
+template<>
+class tuple<>{};
+    
+// 2. 部分具体化的两个参数版，主要是涉及了从一个pair完成的构造
+template<typename _T1, typename _T2>
+class tuple<_T1, _T2> : public _Tuple_impl<0, _T1, _T2>{};
+
+// 3. 泛型的版本
+template<typename... _Elements>
+class tuple : public _Tuple_impl<0, _Elements...>{}
+
+
+// _Tuple_impl结构体，里面还有一个_Head_base，里面存放了类型为_Head的一个数据
+// 1. 泛型版本
+template<std::size_t _Idx, typename _Head, typename... _Tail>
+struct _Tuple_impl<_Idx, _Head, _Tail...> : public _Tuple_impl<_Idx + 1, _Tail...>,private _Head_base<_Idx, _Head>{}//我们看到这里就发现有个不断递归继承的一个关系
+
+// 2. 具体化
+template<std::size_t _Idx, typename _Head>//最后的最后，会继承到这个结构体，最终就完成这样一个串接
+struct _Tuple_impl<_Idx, _Head> : private _Head_base<_Idx, _Head>{}
+```
+
+### 41.2 tuple获得head, tail的实现
+
+```c++
+// 实现部分主要是依靠桥接的_Tuple_impl结构体
+
+/* head实现 */
+/*
+就是直接获得存储数据的_Head_base类的的_M_head
+*/
+static constexpr _Head& _M_head(_Tuple_impl& __t) noexcept
+{ return _Base::_M_head(__t); }
+
+/* tail实现*/
+/*
+所谓tail，对每一层继承，其实都是指的继承的所有的上层结点形成的整体。所以，可以通过强制类型转换，得到对应的_Inherited的结构体
+*/
+static constexpr _Inherited& _M_tail(_Tuple_impl& __t) noexcept
+{ return __t; }
+```
+
+## 42. type traits类型萃取机制
+
++ 就是对一个类型，包括int，float这些基本类型还有一些class这样的classes，对它们的默认构造函数、复制构造函数、赋值运算符、析构函数进行重要度的定义，以指导在对不同类型进行处理时采取不同的措施
+
+![](pictures/25.png)
+
++ 比如一个包含有指针的类，它就可以定义它的析构为重要的
++ 其中的POD表示是不是C语言的那种struct
+
+### 42.1 c++11还有很多其它的traits
+
++ 到了C++11，加入更多的东西，包括了对类是否有哪类复制运算符，复制构造函数，是否是真正，是否是void，是否是float，甚至是否是class，都进行了定义。在头文件type_traits里面可以看到
+
+```c++
+template<typename _Tp>
+struct is_reference : public __or_<is_lvalue_reference<_Tp>,
+is_rvalue_reference<_Tp>>::type
+{ };
+```
+
++ 仅仅只是做了type_def，又怎么知道它是重要还是不重要呢，这涉及其实现
+
+## 43. type_traits的实现
+
++ 还是拿例子说明
+
+```c++
+// 1. is_void的例子
+template<typename _Tp>
+struct is_void : public __is_void_helper<typename remove_cv<_Tp>::type>::type{ };
+
+//首先看到remove_cv这个东西，当然还有add_系列也是一样的，都是模板使用的出神入化
+// 1.1 从remove系列入手
+// 1.1.1 remove_const
+template<typename _Tp>
+struct remove_const
+{ typedef _Tp     type; };//这里定义一个模板，没办法，虽然只要使用特化版本就行，但也必须为此定义出模板才行
+
+template<typename _Tp>
+struct remove_const<_Tp const>
+{ typedef _Tp     type; };//使用特化版本，如果是const，就定义type为不带const的版本，这样就去掉了const
+
+// 1.1.2 remove_volatile
+// 基本思路和remove_const一致
+template<typename _Tp>
+struct remove_volatile
+{ typedef _Tp     type; };
+
+template<typename _Tp>
+struct remove_volatile<_Tp volatile>
+{ typedef _Tp     type; };
+
+// 1.1.3 remove_cv，实际就是结合remove_const和remove_volatile
+template<typename _Tp>
+struct remove_cv
+{
+    typedef typename remove_const<typename remove_volatile<_Tp>::type>::type     type;//这就是精妙之处了，很厉害这个思路
+};
+
+// 1.2 __is_void_helper
+template<typename>
+struct __is_void_helper
+    : public false_type { };
+
+template<>
+struct __is_void_helper<void>
+    : public true_type { };
+//这里就可以发现，结合起来了，false_type和true_type，会对这样一个东西判断是否是void，如果是void就可以返回true_type
+```
+
+```c++
+// 2. is_integral判断是否是整型
+template<typename _Tp>
+struct is_integral : public __is_integral_helper<typename remove_cv<_Tp>::type>::type{ };
+
+// 2.1 __is_integral_helper
+template<typename>
+struct __is_integral_helper
+    : public false_type { };//定义一个模板，默认传false_type
+
+template<>
+struct __is_integral_helper<bool>
+    : public true_type { };//而定义许多特化版本，包括bool，unsigned int，long，long long，unsigned long long这样的，它都返回true_type
+```
+
++ 而对于is_class,is_union,is_enum,is_pod，is_move_assignable这样的，在实现时没有找到实现代码，可能是编译器完成的
++ 从上面这个实现来看，可以得到诸多结论和设计上的思路
+  + 一是实现上广泛使用模板的特化。
+
+## 44. cout
+
++ 实际就是一个对象，重载了<<运算符，对各种基本类型的输入有反应
+
+## 45. movable元素对deque速度效能的影响
+
++ 对于带有指针的，使用movable的办法，可以很好地降低构造所耗费的时间。这常常体现在使用所谓的移动构造函数，当然，对于复制构造和赋值，还是使用的深拷贝。当然，既然使用了移动构造的这个特性，那么在析构函数中就不可避免地需要加上对指针是否为nullptr的判断。
+
++ 这也要求在使用move时，一定要确认它不会再被使用
+

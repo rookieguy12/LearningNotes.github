@@ -579,6 +579,223 @@ State_Machine()
 | 半同步半异步改进版         | 负责管理监听socket；负责分配socket给工作线程                 | 不负责读写 | 负责一个连接socket的处理和读写     |
 | 领导者追随者               | 略                                                           | 略         | 略                                 |
 
+## 第9章 I/O复用
+
++ I/O复用可以让程序同时监听多个文件描述符。
++ 应用场景
+  + client要同时处理多个socket时，比如非阻塞connect技术
+  + client要同时处理多个user的输入和网络连接。如聊天室程序
+  + TCP server要同时处理监听socket和连接socket。也是最常用的场景。
+  + server要同时处理TCP请求和UDP请求。如回射服务器
+  + server要同时监听多个端口或处理多种服务。
++ I/O复用本身是**阻塞**的。
++ Linux中实现I/O多路复用的系统调用有select、poll、epoll
+
+### 9.1 select系统调用
+
++ 用途：在一段指定时间内，监听用户感兴趣的文件描述符上的可读可写和异常事件。
+
+#### 9.1.1 select API
+
+```c++
+#include <sys/select.h>
+int select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, struct timeval* timeout);
+
+/*
+1. nfds描述了被监听的文件描述的总个数，一般是最大文件描述符 + 1，毕竟从0开始计数。
+2. readfds，writefds，exceptfds分别指向可读，可写，异常描述符集合。返回时，select会修改它们来告诉程序哪些已经就绪。
+3. timeout用于设置超时时间，内核会修改它告诉你等了多久，当然失败的时候就是不确定的值了。传入为NULL则表示一直阻塞。
+
+4. return value:表示就绪的文件描述符的总数，timeout内没有则返回0，select失败返回-1，并设置errno。若是在select等待期间，程序收到信号。则select立刻返回-1，并置errno为EINTER。
+*/
+
+/*
+fd_set结构体仅包含一个int数组，每个二进制bit标记了一个文件描述符，能容纳的文件描述符数量由FD_SETSIZE指定，限制了select能同时处理的文件描述符的总量。
+*/
+
+struct timeval
+{
+	long tv_sec;	//秒数
+	long tv_usec;	//微妙数
+}
+
+void FD_ZERO(fd_set *fdset);			//清除fdset所有位
+void FD_SET(int fd, fd_set *fdset);	//设置fdset中的fd位
+FD_CLR(int fd, fd_set *fdset);	//清除fdset中的fd位
+int FD_ISSET(int fd, fd_set *fdset);//测试fd位是否被设置
+```
+
+#### 9.1.2 文件描述符的就绪条件
+
++ 即搞清什么情况下这些fds会就绪或可读
++ 以下情况socket可读
+  + **socket内核接收缓存区中的byte数大于等于其低水位标记**SO_RCVLOWAT。此时可以无阻塞地读该socket，返回的字节数也会大于0。
+  + **socket通信的对方关闭连接。此时读操作返回0**
+  + **监听socket上有新的连接请求**
+  + **socket上有未处理的错误**。使用getsockopt可读取和清除错误。
++ 以下情况socket可写
+  + **socket内核发送缓存区中的byte数大于等于其最低水位标记**SO_SNDLOWAT.此时写操作返回的字节数大于0
+  + **socket的写操作被关闭。**对写操作被关闭的socket执行写操作会触发一个SIGPIPE信号。
+  + **socket使用非阻塞connect连接成功或者失败(超时)之后。**
+  + **socket上有未处理的错误**。使用getsockopt可读取和清除错误。
++ 异常情况
+  + socket上接收到了带外数据。
+
+#### 9.1.3 处理带外数据
+
++ 一般地，会采用带MSG_OOB标志的recv函数来读取带外数据
+
+```c++
+if (FD_ISSET(connfd, &exception_fds))
+{
+    ret = recv(connfd, buf, sizeof(buf) - 1, MSG_OOB);
+    if (ret <= 0)
+        break;
+    printf("get %d bytes of oob data: %s\n", ret, buf);
+}
+```
+
+### 9.2 poll系统调用
+
++ poll系统调用和select类似，也是在指定时间内轮询一定数量的文件描述符，来测试是否有就绪的fd
+
+#### 9.2.1 poll API
+
+```c++
+#include <poll.h>
+int poll(struct pollfd* fds, nfds_t nfds, int timeout);
+
+/*
+1. fds：是一个pollfd类型的结构数组，指定了所有感兴趣的文件描述符上发生的可读、可写、异常等事件。
+2. nfds：指出了被监听的事件集合fds的大小，nfds_t就是一个unsigned long的typedef
+3. timeout：作用也和select上的那个类似，不过直接使用int代表毫秒数，指定为-1则表示一直等的一个阻塞方式，为0时表示立即返回，反之就是timeout毫秒后返回。
+
+4. return value：和select的一致
+*/
+
+
+
+struct pollfd
+{
+    int fd;			//文件描述符
+    short events;	//注册的事件
+    short revents;	//实际发生的事件，由内核填充
+}
+/*
+fd指定了文件描述符；events告诉poll要监听fd上的哪些事件，它实际就是一系列事件的按位或。revents是由内核修改的通知应用程序，在fd上实际发生了哪些事件的。
+*/
+```
+
+![](Images/26.png)
+
+![](Images/27.png)
+
++ 上面的POLLRDNORM、POLLRDBAND、POLLWRNORM、POLLWRBAND都是XOPEN规范定义，实际是将POLLIN和POLLOUT分的细，区别对待普通的和优先的数据。但记住，**Linux并不支持它们**。
++ 一般地，程序根据recv的返回值区分socket上的是有效数据还是对方关闭了socket。但从Linux 2.6.17开始，GNU为poll调用增加了POLLRDHUP，表示接收到对方关闭socket的请求就触发。不过在使用前需要define _GNU_SOURCE
+
+### 9.3 epoll系列系统调用
+
+#### 9.3.1 内核事件表
+
++ epoll是Linux特有I/O多路复用的函数。与上述两种差异较大。主要不同点如下：
+  + **epoll使用一组函数来完成**，而不是单纯的select、poll这样一个单独的系统调用。
+  + **epoll把用户关心的文件描述符上的事件放在内核的一个时间表中**，无须像select和poll那样每次调用都要重复传入文件描述符集或者事件表作为参数。**不过需要一个额外的文件描述符来标识内核中的这个事件表。**
+
+```c++
+#include <sys/epoll.h>
+int epoll_create(int size);
+/*
+功能：创建上面说的那个额外的文件描述符
+1. size：提示内核，事件表大概要多大，但实际上还是可以调的。
+
+2. return value：返回的值用于其它所有epoll系统调用的第一个参数，指定了要访问的内核事件表，相当于一个键。
+*/
+
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+/*
+功能：
+1. epfd：就是上面创建那个文件描述符
+2. op：指明了操作类型
+	主要是如下三种：
+		1、EPOLL_CTL_ADD：往事件表上注册fd上的事件
+		2、EPOLL_CTL_MOD：修改fd上注册的事件
+		3、EPOLL_CTL_DEL：删除fd上注册的事件
+3. fd：就是指定的文件描述符
+5. event：一个指定事件的epoll_event类型
+
+6. return value: 成0败-1，失败同时会设置errno
+*/
+
+struct epoll_event
+{
+    __uint32_t events;	//epoll事件
+    epoll_data_t data;	//用户数据
+}
+/*
+1.events：描述了事件类型。epoll支持的事件基本和poll相同，不过要在上面poll那个表的事件宏里加上E的前缀，从POLL***变成EPOLL***。还有两个额外事件EPOLLET和EPOLLONESHOT
+2.data：用于存储用户数据
+*/
+
+typedef union epoll_data{
+    void* ptr;		//ptr用于指定fd相关的用户数据
+    int fd;			//用的最多，指定了事件从属的目标的文件描述符
+    uint32_t u32;
+    uint64_t u64;
+}epoll_data_t;
+```
+
+#### 9.3.2 epoll_wait函数
+
++ 是epoll系列系统调用的主要接口，会在一段设定时间内等待一组文件描述符上的事件
+
+```c++
+#include <sys/epoll.h>
+int epoll_wait(int epfd, struct epoll_event* events, int maxevents, int timeout);
+
+/*
+功能：相当于select和poll这样的接口
+1. epfd：和上面一样
+2. events：也是参考上面那部分，注意这里是events，是一个数组，起到作为输出参数的作用，实际并不会传入具体要监听的事件，因为前面的epoll_ctl已经注册了
+3. maxevents：指定最多监听多少个事件，必须大于0；一般可以传入MAX_EVENT_NUMBER
+4. timeout：和poll里面的timeout一样
+
+5. return value：返回就绪的文件描述符的个数
+*/
+```
+
++ epoll_wait函数只要检测到了事件，就将所有就绪的事件从由epfd所指定的内核事件表复制到events指向的数组里面。
+
+#### 9.3.3 LT和ET模式
+
++ epoll对于文件描述符的操作有两种模式
+  + LT电平触发（默认）
+    + epoll相当于一个效率更高的poll
+    + epoll_wait检测到有事件发生并通知程序后，程序可不立刻处理事件，这样，下次依然会继续告知。
+  + ET边沿触发
+    + 是epoll的高效工作模式。效率比LT模式高
+    + 每注册一个文件描述符上的EPOLLET事件，epoll就将以ET模式操作该描述符。
+    + epoll_wait检测到有事件发生并通知程序后，程序必须立刻处理事件，因为后续的epoll_wait将不再向程序通知事件。这样能降低同一个epoll事件重复触发的次数
+    + 注意应该使用非阻塞的设置，因为如果是阻塞的，后续的读写操作会因为缺少后续事件而处于阻塞状态。
+
+#### 9.3.4 EPOLLONESHOT事件
+
++ 即使使用ET模式，一个socket上的事件依然可能被触发多次，这就引起一个问题，比如一个线程在读取完某个socket上的数据后开始处理数据，发现socket上数据又可读了，导致又开一个线程对同一个socket进行操作，出现两个线程同时操作一个socket的局面。
++ 为避免上述情况，使用epoll的EPOLLONESHOT事件实现。
++ 注册了EPOLLONESHOT事件的文件描述符后，os最多触发注册的一个可读、可写或异常事件，且只触发一次。除非使用了epoll_ctl函数重置了EPOLLONESHOT事件。那么，对于注册了EPOLLONESHOT事件的socket，一旦被处理完毕，就应该重置这个EPOLLONESHOT事件，确保socket下次可读时，能触发EPOLLIN事件。
++ 例子P177
+
+### 9.4 三组I/O复用函数的比较
+
++ 事件集
+  + select
+    + fd_set并未将文件描述符和具体事件绑定，而是提供了一个文件描述符集合，为此select提供了三个类型参数来传入可读、可写、异常等事件，导致select无法处理更多类型的事件
+    + fd_set会被内核修改，下次调用select又得重置三个fd_set集合
+  + poll
+    + pollfd将文件描述符和事件都定义其中
++ 最大支持文件描述符数
++ 工作模式
++ 具体实现
+
 ## 第5章 Linux网络编程基础API
 
 ### 5.1 socket地址API
