@@ -103,8 +103,8 @@ copy(array.begin(), array.end(),ostream_iterator<int,char>(cout, " "));//放入�
 
 + 前闭后开数组
 + <u>多用namespace让程序具有条理</u>
-+ **一般能向后加东西的都能push_back**
-+ vector在push_back一个新元素时，如果空间不足，就会分配成原来两倍大小的空间。
++ **一般能向后加东西的都能push_back，emplace_back**
++ vector在push_back一个新元素时，如果空间不足，就会分配成原来两倍大小的空间。而在分配时，实际就是把元素进行重新构造的过程，如果vector的元素是对象，它会判断是否能安全使用移动构造函数，如果移动构造函数标记为noexcept，不抛出异常，那么会调用移动构造函数，而不是复制构造函数。
 +  emplace的三个函数是C++11新增的给vector，list，deque三个顺序容器的新函数，与insert的不同点在于insert传入要插入的对象，而emplace传入的是容器容纳的对象进行构造所需要的参数，emplace还会返回插入成功时该元素的迭代器
 
 ```c++
@@ -187,8 +187,6 @@ list(first,last) 声明一个列表，其元素的初始值来源于由区间所
 3. reverse()
 4. sort()
 ```
-
-
 
 ### 3.5 forward_list
 
@@ -447,7 +445,9 @@ dealllocate()调用::opeartor delete，最后调用到free
 
 + iterator_category
 
-  + 定义迭代器是双向的/单向的/随机的
+  + 定义迭代器是输入的/输出的/双向的/单向的/随机的
+    + 可以发现，这里使用继承，巧妙地实现了多个特性的结合
+
 
   ![](pictures/9.png)
 
@@ -478,6 +478,7 @@ dealllocate()调用::opeartor delete，最后调用到free
 
 + 是特性的意思。迭代器Traits对于传入的迭代器，能够“萃取”其类型的特性。
 + 在算法和iterator或者指针进行问答过程中充当中间层。<font color = #cc00cc>中介者模式</font>，这样，将algorithm对于5种types的询问的工作交由Traits完成，实现了algorithm和具体iterator的解耦，这里的具体iterator是专门指一般的iterator和指针。
++ 所谓问答和萃取，实质就是使用typedef typename xxxx的方式，将传入的iterator中使用typedef定义的信息进行提取，
 
 ![](pictures/10.png)
 
@@ -485,9 +486,74 @@ dealllocate()调用::opeartor delete，最后调用到free
 
 + 基本结构
 
-  ![](pictures/11.png)
+  ```c++
+  template<typename _Iterator, typename = __void_t<>>
+  struct __iterator_traits { };
+  
+  template<typename _Iterator>
+  struct __iterator_traits<_Iterator,
+  __void_t<
+  typename _Iterator::iterator_category,
+  typename _Iterator::value_type,
+  typename _Iterator::difference_type,
+  typename _Iterator::pointer,
+  typename _Iterator::reference				//这里相当重要，相当于是对iterator进行限制，能创建这个struct的必然是定义了如上typedef的一个类；而这些typedef就能决定它必然是一个迭代器；防止非迭代器成分调用到它。
+  >>
+  {
+      typedef typename _Iterator::iterator_category iterator_category;
+      typedef typename _Iterator::value_type        value_type;
+      typedef typename _Iterator::difference_type   difference_type;
+      typedef typename _Iterator::pointer           pointer;
+      typedef typename _Iterator::reference         reference;
+  };
+  
+  // 老版本没有__void_t<>的区域，实际就无法对这个模板参数进行判断和要求了
+  template<typename _Iterator>
+  struct iterator_traits
+  {
+      typedef typename _Iterator::iterator_category iterator_category;
+      typedef typename _Iterator::value_type        value_type;
+      typedef typename _Iterator::difference_type   difference_type;
+      typedef typename _Iterator::pointer           pointer;
+      typedef typename _Iterator::reference         reference;
+  };
+  
+  // 泛型版本
+  template<typename _Iterator>
+  struct iterator_traits : public __iterator_traits<_Iterator> { };
+  
+  // 指针的偏特化版本
+  template<typename _Tp>
+  struct iterator_traits<_Tp*>
+  {
+      typedef random_access_iterator_tag iterator_category;
+      typedef _Tp                         value_type;
+      typedef ptrdiff_t                   difference_type;
+      typedef _Tp*                        pointer;
+      typedef _Tp&                        reference;
+  };
+  
+  // const指针的偏特化版本
+  template<typename _Tp>
+  struct iterator_traits<const _Tp*>
+  {
+      typedef random_access_iterator_tag iterator_category;
+      typedef _Tp                         value_type;
+      typedef ptrdiff_t                   difference_type;
+      typedef const _Tp*                  pointer;
+      typedef const _Tp&                  reference;
+  };
+  
+  
+  // 函数接口，可以看到，后面很多地方都使用这种方式，利用模板函数的自动类型推断，将类的构造从用户端解放出来，转移到函数内部去实现。这个函数的功能就是得到iterator_category，即前面那个struct
+  template<typename _Iter>
+  inline _GLIBCXX_CONSTEXPR
+  typename iterator_traits<_Iter>::iterator_category __iterator_category(const _Iter&)
+  { return typename iterator_traits<_Iter>::iterator_category(); }
+  ```
 
-  直接利用传入的iterator类型定义出相应的iterator的信息
++ 看源代码可以发现，C++11开始，使用了一个继承结构，以往iterator_traits是负责这些typedef的工作的，现在则是使用继承的_iterator_traits来完成这个工作，这里可以得到一个提高拓展性的思路。
++ 直接利用传入的iterator,使用typedef typname xxx定义出相应的iterator的信息
 
 + 对于指针，其category都是random_access_iterator_tag
 
@@ -509,11 +575,20 @@ dealllocate()调用::opeartor delete，最后调用到free
 + 在GCC2.9中，vector只包含三个数据成员，一个指向start的指针/迭代器，一个指向finish的指针/迭代器，还有一个指向空间结尾的指针/迭代器。总共占24个字节(64位)/12个字节(32位)
 
   ```c++
-  class vector<T>
+  template<typename _Tp, typename _Alloc = std::allocator<_Tp> >
+  class vector : protected _Vector_base<_Tp, _Alloc>
+  {}
+  
+  template<typename _Tp, typename _Alloc>
+  struct _Vector_base
   {
-      T* start;
-      T* finish;
-      T* end_of_storage;
+      struct _Vector_impl : public _Tp_alloc_type
+      {
+          pointer _M_start;
+          pointer _M_finish;
+          pointer _M_end_of_storage;//其中pointer是一个typedef
+      }
+  
   }
   ```
 
@@ -1100,7 +1175,7 @@ template<typename _RandomAccessIterator>
 inline _GLIBCXX14_CONSTEXPR
 typename iterator_traits<_RandomAccessIterator>::difference_type
     __distance(_RandomAccessIterator __first, _RandomAccessIterator __last,
-               random_access_iterator_tag)//最后一个参数标识了要进哪个函数
+               random_access_iterator_tag)//最后一个参数标识了要进哪个函数，但是不分配形参，只是作为标记
 {
     // concept requirements
     __glibcxx_function_requires(_RandomAccessIteratorConcept<
@@ -2167,3 +2242,14 @@ struct __is_integral_helper<bool>
 
 + 这也要求在使用move时，一定要确认它不会再被使用
 
+## 小结
+
++ STL的一些基本特点
+  + 充分体现了设计原则和设计模式，许多地方有着相当细粒度地遵循单一职责，最小知道等原则。
+  + 静态多态和模板编程的极致使用。
+    + 萃取机制
+    + 模板递归
+    + 函数模板辅助生成类模板的实例
+    + 通过冗余参数，例如函数参数，甚至模板参数，来限制函数的进入条件；
+      + 比如_iterator_traits就使用了\_void_t<一系列typedef>来约束传入的模板参数
+      + 比如distance函数，distance函数实际上是借助__distance函数来实现的，distance接口只传入了两个迭代器，而在实现中，\_\_distance则有第三个参数，同时这个参数也是一个模板参数，传入的就是迭代器类型iterator_category，而甚至没分配形参，仅作为模板特化的工具，利用不同的iterator_category，进入不同的特化版本，从而计算不同的distance类型，返回值则是利用iterator_traits从迭代器里萃取的difference_type
