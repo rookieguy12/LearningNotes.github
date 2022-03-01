@@ -783,9 +783,10 @@ int epoll_wait(int epfd, struct epoll_event* events, int maxevents, int timeout)
 
 #### 9.3.4 EPOLLONESHOT事件
 
-+ 即使使用ET模式，一个socket上的事件依然可能被触发多次，这就引起一个问题，比如一个线程在读取完某个socket上的数据后开始处理数据，发现socket上数据又可读了，导致又开一个线程对同一个socket进行操作，出现两个线程同时操作一个socket的局面。
++ 即使使用ET模式，一个socket上的事件依然可能被触发多次，比如这个问题，比如一个线程在读取完某个socket上的数据后开始处理数据，发现socket上数据又可读了，导致又开一个线程对同一个socket进行操作，出现两个线程同时操作一个socket的局面。
 + 为避免上述情况，使用epoll的EPOLLONESHOT事件实现。
 + 注册了EPOLLONESHOT事件的文件描述符后，os最多触发注册的一个可读、可写或异常事件，且只触发一次。除非使用了epoll_ctl函数重置了EPOLLONESHOT事件。那么，对于注册了EPOLLONESHOT事件的socket，一旦被处理完毕，就应该重置这个EPOLLONESHOT事件，确保socket下次可读时，能触发EPOLLIN事件。
++ 实际就确保了ET模式下的一个socket在同一时间内只许被一个线程处理
 + 例子P177
 
 ### 9.4 三组I/O复用函数的比较
