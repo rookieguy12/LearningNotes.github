@@ -12,13 +12,18 @@
 ### 2.1 六大部件
 
 + **容器Containers**：是各种数据结构，从实现角度看，是一种class template
+
 + 分配器Allocators：负责空间配置与管理，从实现角度看，它实现了动态空间配置、空间管理、空间释放的class template
+
 + **算法Algorithms**：包含各种常用算法。是一种function template
+
 + 迭代器Iterators：主要用于算法对容器的访问，是所谓的泛型指针。从实现角度来看，是一种将 operator*、operator->、operator++、operator- - 等指针相关操作进行重载的class template。所有STL容器都有自己专属的迭代器，只有容器本身才知道如何遍历自己的元素。原生指针(native pointer)也是一种迭代器。
+
 + 适配器Adapters：用来修饰容器、仿函数、迭代器接口的东西。例如像是queue和stack，实际算是一种容器适配器，因为低层是借助deque的。改变仿函数的叫函数适配器，改变容器的叫容器适配器，改变迭代器的交迭代器适配器。
+
 + 仿函数Functors：行为类似函数，但是是一个class，它重载了operator()，一般的函数指针也视作仿函数。
 
-![](pictures/1.png)
+  ![](pictures/1.png)
 
 + 这些都是相对独立的
 + 容器用来存放数据，分配器用来将数据存入容器。算法则通过迭代器作为桥梁对容器的数据进行操作。迭代器相当于一个泛化的指针。*<u>迭代器是前闭后开的，end()指向最后一个元素的后一个位置，cend()则是第一个的前一个</u>*
@@ -497,7 +502,7 @@ dealllocate()调用::opeartor delete，最后调用到free
   typename _Iterator::value_type,
   typename _Iterator::difference_type,
   typename _Iterator::pointer,
-  typename _Iterator::reference				//这里相当重要，相当于是对iterator进行限制，能创建这个struct的必然是定义了如上typedef的一个类；而这些typedef就能决定它必然是一个迭代器；防止非迭代器成分调用到它。
+  typename _Iterator::reference				//这里相当重要，相当于是对iterator进行限制，能创建这个struct的必然是定义了如上typedef的一个类；而这些typedef就能决定它必然是一个迭代器；防止传入非迭代器的时候调用到它。
   >>
   {
       typedef typename _Iterator::iterator_category iterator_category;
@@ -1112,13 +1117,13 @@ Algorithm(Iterator iter1, Iterator iter2)
 }
 
 template<class Iterator, class Cmp>
-Algorithm(Iterator iter1, Iterator iter2, Cmp cmp)//第二个模板参数往往是一个比较大小的准则，它可以是或者lambda
+Algorithm(Iterator iter1, Iterator iter2, Cmp cmp)//第二个模板参数往往是一个比较大小的准则，它可以是函数指针 / functor / lambda
 {
     ...
 }
 ```
 
-+ 算法通过向迭代器问询信息，而迭代器则利用萃取得到对应容器的这些信息，相当于一个中介者，负责统一调度算法和容器之间的信息交流。有点像MVVP
++ 算法通过向迭代器问询信息，而迭代器则利用萃取得到对应容器的这些信息，相当于一个中介者，负责协调算法和容器之间的信息交互。有点像MVVP
 
 ## 28. 迭代器的分类(category)
 
@@ -2090,7 +2095,7 @@ tie(val, i, k) = t;
 
 + 和上面那个万用hash类似，也是使用可变模板参数的技巧来递归，不过这里是使用递归地继承从而实现tuple，这是一个最大的亮点。
 + 第二点则是在实现上相当细粒度地遵循**单一职责原则和最小知道原则**，tuple桥接一个\_Tuple_impl来实现这个递归继承的功能，而\_Tuple_impl则继承一个\_Head_base，实现对这样一个单一数据的一些操作
-+ 第三点是充分利用了函数模板的自动推测机制来弥补模板类创建时的无法自动推断缺陷
++ 第三点是充分利用了函数模板的自动推测机制来弥补模板类创建时的无法自动推断缺陷，某种意义上也算是解耦。
 
 ```c++
 // tuple类
@@ -2253,3 +2258,4 @@ struct __is_integral_helper<bool>
     + 通过冗余参数，例如函数参数，甚至模板参数，来限制函数的进入条件；
       + 比如_iterator_traits就使用了\_void_t<一系列typedef>来约束传入的模板参数
       + 比如distance函数，distance函数实际上是借助__distance函数来实现的，distance接口只传入了两个迭代器，而在实现中，\_\_distance则有第三个参数，同时这个参数也是一个模板参数，传入的就是迭代器类型iterator_category，而甚至没分配形参，仅作为模板特化的工具，利用不同的iterator_category，进入不同的特化版本，从而计算不同的distance类型，返回值则是利用iterator_traits从迭代器里萃取的difference_type
+
