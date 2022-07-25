@@ -480,6 +480,14 @@ test : $(value)
 
     ```makefile
     $(join <list1>, <list2>)
+    #功能就是把list2中对应位置的元素接到list1中对应元素的后面
+    ```
+
+  + 获取匹配模式文件名函数
+
+    ```makefile
+    $(wildcard PATTERN)
+    
     ```
 
     
