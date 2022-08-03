@@ -487,8 +487,38 @@ test : $(value)
 
     ```makefile
     $(wildcard PATTERN)
+    #功能是列出符合pattern的文件名，这也是为什么不是使用$*.cpp来表示OBJ，而是用wildcard
+    ```
+
+  + foreach函数
+
+    ```makefile
+    $(foreach <var>, <list>, <text>)
+    #功能是把list中单词一一去除，放到var指定的变量内，再执行text含有的表达式。结果会一空格隔开
+    
+    name:=a b c d
+    files:=$(foreach n,$(names),$(n).o)
+    all:
+        @echo $(files)
+    #结果是a.o b.o c.o d.o
+    ```
+
+  + if语句
+
+    ```makefile
+    $(if <condition>,<then-part>)
+    $(if <condition>,<then-part>,<else-part>)
+    #如果condition是非空字符串，那么就执行then—part,否则执行else-part
+    ```
+
+  + call语句
+
+    ```makefile
+    $(call <expression>,<parm1>,<parm2>,<parm3>,...)
     
     ```
+
+    
 
     
 
