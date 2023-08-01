@@ -1,12 +1,9 @@
 ## Meta Programming notes
 
-```c++
-```
-
 ### SFINAE
 
 ```c++
-// My examples：要求禁止实参推导，以阻止指定仅integral的参数可以进入函数test
+// My examples：要求禁止实参推导，以阻止并指定仅integral的参数可以进入函数test
 // 写法1
 template<typename T>
 typename enable_if<is_integral<T>::value, T>::type
