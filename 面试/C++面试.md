@@ -317,7 +317,7 @@ c语言中不允许有同名函数，因为编译时函数命名是一样的，�
       func(std::forward<T>(arguments);
   }
   // 前面说了这个万能引用
-  // 左值的时候，模板参数推导为T&类型，进入forward后，经过强制类型转换，变T&&&,再经过折叠，变为T&返回，于是进入左值的实现
+  // 左值的时候，模板参数推导为T&类型，进入forward后，经过强制类型转换，变T&&&,再经过规则，变为T&返回，于是进入左值的实现
   // 右值的时候，模板参数推导为T类型，进入forward后，强制类型转换成T&&，于是进入右值的实现
   template<typename T>
   void func(T& arguments){}
@@ -339,7 +339,7 @@ c语言中不允许有同名函数，因为编译时函数命名是一样的，�
                  " substituting _Tp is an lvalue reference type");
         return static_cast<_Tp&&>(__t);
   }
-  //这是另一个版本，这个版本的__t为explicit type&&，说明只有它是未命名的右值时，才会用到这个版本，比如在不经过FunInterface的“变量命名“导致“左值化”的处理下，直接使用forward<decltype(某个没命名右值)>(没命名右值)，这时就会进入这个版本；当然，一般的完美转发的使用下，还是会用上面那个模板
+  //这是另一个版本msvc的实现，这个版本的__t为explicit type&&，说明只有它是未命名的右值时，才会用到这个版本，比如在不经过FunInterface的“变量命名“导致“左值化”的处理下，直接使用forward<decltype(某个没命名右值)>(没命名右值)，这时就会进入这个版本；当然，一般的完美转发的使用下，还是会用上面那个模板
   ```
   
 
@@ -414,6 +414,7 @@ c语言中不允许有同名函数，因为编译时函数命名是一样的，�
   + 在C++里面const则只表明是readonly的
 + const在编译期间；define在预处理阶段
 + const定义的常量是带类型的；define定义的常量不带类型。因此define定义的常量不利于类型检查。
++ 某些简单类型的const会被编译器放符号表里面，去修改它的值也没用，运行时不通过寻得const常量的地址来获得值。
 
 #### 14. 说说运算符i++和++i的区别
 
@@ -494,8 +495,6 @@ c语言中不允许有同名函数，因为编译时函数命名是一样的，�
     #endif
     ```
     
-    
-    
   + unique_ptr
     + 基于所有权概念，即进行智能指针赋值时，所有权转移，只有一个指针能获得访问权限。
     + 与auto_ptr不同的是
@@ -507,7 +506,7 @@ c语言中不允许有同名函数，因为编译时函数命名是一样的，�
 
 #### 4. 简述new和malloc的区别
 
-+ new与delete是操作符，而malloc/free是函数故new/delete允许重载；malloc不行
++ new与delete是操作符，而malloc/free是函数。故new/delete允许重载；malloc不行
 + new操作无须指定内存块的大小，malloc则要显式地指出size
 + new返回对应类型指针，而malloc返回void *
 + new分配失败抛出异常bad_alloc，malloc则返回NULL
@@ -775,6 +774,7 @@ class X
 + 解决办法
   + 使用完了要删除
   + 使用智能指针
+  + RAII就完事了，用类包装
 
 #### 5. 常量存放在哪？
 
